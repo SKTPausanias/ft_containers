@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   reverseIterator.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/09/29 11:26:29 by mlaplana         ###   ########.fr       */
+/*   Created: 2020/09/29 15:38:45 by mlaplana          #+#    #+#             */
+/*   Updated: 2020/09/29 15:42:49 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <vector>
-#include "List.hpp"
+#ifndef REVERSEITERATOR_HPP
+#define REVERSEITERATOR_HPP
 
-int main()
+template<class T>
+class reverseIterator
 {
-    return 0;
-}
+    
+};
+
+#endif
