@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/09/28 22:07:05 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/09/29 02:13:12 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,26 @@ protected:
 public:
     ListIterator(): _ptr(nullptr) { }
     ListIterator(const Tptr &ptr): _ptr(ptr) { }
-    ListIterator(const ListIterator &c): _ptr(c.ptr) { }
+    ListIterator(const ListIterator &c): _ptr(c._ptr) { }
+    ~ListIterator() {};
+    ListIterator &operator=(const ListIterator &c) {this->_ptr = c._ptr; return *this;}
     
-    reference operator*() const {return *_ptr}
+    reference operator*() const {return *_ptr;}
+    pointer operator->() const {return _ptr;}
+    ListIterator& operator++() {
+        ++_ptr;
+        return *this;
+    }
     
+    ListIterator operator++(int) { return ListIterator(_ptr++); }
+    
+    ListIterator& operator--() {
+        --_ptr;
+        return *this;
+    }
+    
+    ListIterator operator--(int) { return ListIterator(_ptr--); }
+
 };
 
 template <class T>
