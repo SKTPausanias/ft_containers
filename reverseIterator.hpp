@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:38:45 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/09/30 13:12:14 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/09/30 19:53:48 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ public:
     reverseIterator &operator=(const reverseIterator &c) { _ptr = c._ptr; return *this; }
     
     reference operator*() { 
-        
+        pointer tmp(_ptr);
+        return *--tmp;
     }
 };
 
