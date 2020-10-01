@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlaplana <mlaplana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/01 13:10:28 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/01 17:08:15 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include <iostream>
 template<class T>
 class VectorIterator
 {
@@ -25,7 +26,7 @@ protected:
     pointer _ptr;
 public:
     VectorIterator(): _ptr(nullptr) { }
-    VectorIterator(const Tptr &ptr): _ptr(ptr) { }
+    VectorIterator(const pointer &ptr): _ptr(ptr) { }
     VectorIterator(const VectorIterator &c): _ptr(c._ptr) { }
     virtual ~VectorIterator() {};
     VectorIterator &operator=(const VectorIterator &c) {this->_ptr = c._ptr; return *this;}
@@ -75,7 +76,7 @@ public:
 	typedef VectorIterator<value_type> iterator;
 	typedef VectorIterator<value_type> reverse_iterator;
 	typedef std::ptrdiff_t difference_type;
-	unsigned int size_type;
+	typedef unsigned int size_type;
 private:
 	pointer _ptr;
 	size_type _len;
