@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/09/29 14:40:57 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/02 18:17:44 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,21 @@
 namespace ft
 {
 
-template <class Category, class T, class Distance = std::ptrdiff_t,
-            class Pointer = T*, class Reference = T&>
+template <class T>
 class ListIterator
 {
 public:
-    typedef Category iterator_category;
     typedef T value_type;
-    typedef Distance difference_type;
-    typedef Pointer pointer;
-    typedef Reference reference;
+    typedef value_type& reference;
+    typedef const value_type& const_reference;
+    typedef value_type* pointer;
+    typedef const value_type* const_pointer;
+    typedef std::ptrdiff_t difference_type;
 protected:
-    typedef ListIterator::pointer Tptr;
-    Tptr _ptr;
+    pointer _ptr;
 public:
     ListIterator(): _ptr(nullptr) { }
-    ListIterator(const Tptr &ptr): _ptr(ptr) { }
+    ListIterator(const pointer &ptr): _ptr(ptr) { }
     ListIterator(const ListIterator &c): _ptr(c._ptr) { }
     virtual ~ListIterator() {};
     ListIterator &operator=(const ListIterator &c) {this->_ptr = c._ptr; return *this;}

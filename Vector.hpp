@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/01 17:08:15 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/02 18:09:04 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include "reverseIterator.hpp"
 template<class T>
 class VectorIterator
 {
 public:
     typedef T value_type;
     typedef value_type* pointer;
+    typedef const value_type* const_pointer;
     typedef value_type& reference;
+    typedef const value_type& const_reference;
 	typedef std::ptrdiff_t difference_type;
 protected:
     pointer _ptr;
@@ -31,9 +34,12 @@ public:
     virtual ~VectorIterator() {};
     VectorIterator &operator=(const VectorIterator &c) {this->_ptr = c._ptr; return *this;}
     
-    reference operator*() const {return *_ptr;}
-    pointer operator->() const {return _ptr;}
+    reference operator*() const { return *_ptr; }
+    const_reference operator*() { return *_ptr; }
+    pointer operator->() const { return _ptr; }
+    const_pointer operator->() { return _ptr; }
 	reference operator[] (const difference_type& _n) const { return _ptr[_n]; }
+    const_reference operator[] (const difference_type& _n) { return _ptr[_n]; }
     VectorIterator& operator++() {
         ++_ptr;
         return *this;
@@ -74,7 +80,9 @@ public:
 	typedef value_type* pointer;
 	typedef const value_type* const_pointer;
 	typedef VectorIterator<value_type> iterator;
-	typedef VectorIterator<value_type> reverse_iterator;
+	typedef VectorIterator<value_type const> const_iterator;
+    typedef reverseIterator<iterator> reverse_iterator;
+    typedef reverseIterator<const_iterator> const_reverse_iterator;
 	typedef std::ptrdiff_t difference_type;
 	typedef unsigned int size_type;
 private:
@@ -82,10 +90,7 @@ private:
 	size_type _len;
 	size_type _capacity;
 public:
-	iterator begin()
-	{
-		
-	}
+    
 };
 
 #endif
