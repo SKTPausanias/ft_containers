@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:38:45 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/01 19:47:37 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/02 17:24:47 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,52 @@ public:
         return --tmp;
     }
 
+    reverseIterator operator++() {
+        --_ptr;
+        return *this;
+    }
+
+    reverseIterator operator++(int) {
+        reverseIterator tmp = *this;
+        --_ptr;
+        return tmp;
+    }
+
+    reverseIterator operator--() {
+        ++_ptr;
+        return *this;
+    }
+
+    reverseIterator operator--(int) {
+        reverseIterator tmp = *this;
+        ++_ptr;
+        return tmp;
+    }
+
+    reverseIterator operator+(int __n) const {
+        return reverseIterator(_ptr - __n); 
+    }
     
+    reverseIterator operator+=(int __n) {
+	    _ptr -= __n;
+	    return *this;
+    }
+
+    reverseIterator operator-(int __n) const {
+        return reverseIterator(_ptr + __n); 
+    }
+    
+    reverseIterator operator-=(int __n) {
+	    _ptr += __n;
+	    return *this;
+    }
+
+    bool operator==(const reverseIterator &c) { return this->_ptr == c._ptr; }
+    bool operator!=(const reverseIterator &c) { return (this->_ptr != c._ptr); }
+    bool operator<(const reverseIterator &c) { return (this->_ptr > c._ptr); }
+    bool operator<=(const reverseIterator &c) { return (this->_ptr >= c._ptr); }
+    bool operator>(const reverseIterator &c) { return (this->_ptr < c._ptr); }
+    bool operator>=(const reverseIterator &c) { return (this->_ptr <= c._ptr); }
 };
 
 #endif
