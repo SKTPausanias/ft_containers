@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mlaplana <mlaplana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/02 18:09:04 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/05 11:53:28 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 #include <iostream>
 #include "reverseIterator.hpp"
+
+namespace ft
+{
+
 template<class T>
 class VectorIterator
 {
@@ -74,6 +78,7 @@ template<class T>
 class Vector
 {
 public:
+    typedef size_t size_type;
 	typedef T value_type;
 	typedef value_type& reference;
 	typedef const value_type& const_reference;
@@ -84,13 +89,111 @@ public:
     typedef reverseIterator<iterator> reverse_iterator;
     typedef reverseIterator<const_iterator> const_reverse_iterator;
 	typedef std::ptrdiff_t difference_type;
-	typedef unsigned int size_type;
 private:
 	pointer _ptr;
-	size_type _len;
+	size_type _size;
 	size_type _capacity;
 public:
+    Vector(): _ptr(nullptr), _size(0), _capacity(0) {}
+    Vector(size_type n, const value_type& val = value_type()) {}
+    Vector(iterator first, iterator last) {}
+    Vector(const Vector& x) {}
+    virtual ~Vector() {}
+    Vector &operator=(const Vector &x) {}
+
+    //iterators
+    iterator begin() {
+        return iterator(this->_ptr);
+    }
+
+    const_iterator begin() const {
+        return const_iterator(this->_ptr);
+    }
+
+    iterator end() {
+        return iterator(this->_ptr + this->_size);
+    }
+
+    const_iterator end() const {
+        return const_iterator(this->_ptr + this->_size);
+    }
+
+    reverse_iterator rbegin() {
+        return reverse_iterator(this->end());
+    }
+
+    const_reverse_iterator rbegin() const {
+        return const_reverse_iterator(this->end());
+    }
+
+    reverse_iterator rend() {
+        return reverse_iterator(this->begin());
+    }
+
+    const_reverse_iterator rend() const {
+        return const_reverse_iterator(this->begin());
+    }
+
+    //capacity
+
+    size_type size() const {
+        return this->_size;
+    }
     
+    size_type max_size() const {}
+    void resize(size_type n, value_type val = value_type()) {}
+    size_type capacity() const;
+    bool empty() const { return (this->_size == 0); }
+    void reserve(size_type n) {}
+
+    reference operator[](size_type n) {}
+    const_reference operator[](size_type n) const {}
+    reference at (size_type n) {}
+    const_reference at (size_type n) const {}
+    reference front() {}
+    const_reference front() const {}
+    reference back() {}
+    const_reference back() const {}
+
+    void assign(size_type size, const_reference val);
+    void assign(iterator first, iterator last);
+    void assign(const_iterator first, const_iterator last);
+    void push_back(const value_type& val);
+    void pop_back();
+    iterator insert(iterator position, const value_type& val);
+    void insert(iterator position, size_type n, const value_type& val);
+    void insert(iterator position, iterator first, iterator last);
+    iterator erase(iterator position);
+    iterator erase(iterator first, iterator last);
+    void swap(Vector& x);
+    void clear();
 };
+
+template<class T>
+bool operator!=(Vector<T> const &lhs, Vector<T> const &rhs) {
+}
+
+template<class T>
+bool operator<(Vector<T> const &lhs, Vector<T> const &rhs) {
+}
+
+template<class T>
+bool operator<=(Vector<T> const &lhs, Vector<T> const &rhs) {
+}
+
+template<class T>
+bool operator>(Vector<T> const &lhs, Vector<T> const &rhs) {
+}
+
+template<class T>
+bool operator>=(Vector<T> const &lhs, Vector<T> const &rhs) {
+}
+
+template<class T>
+void swap(Vector<T> &x, Vector<T> &y) {
+    x.swap(y);
+}
+
+}
 
 #endif
