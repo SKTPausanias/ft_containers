@@ -6,7 +6,7 @@
 /*   By: mlaplana <mlaplana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/05 11:53:28 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/05 13:03:24 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,22 +140,72 @@ public:
         return this->_size;
     }
     
-    size_type max_size() const {}
-    void resize(size_type n, value_type val = value_type()) {}
-    size_type capacity() const;
-    bool empty() const { return (this->_size == 0); }
-    void reserve(size_type n) {}
+    size_type max_size() const {
+        return (ft::min(std::numeric_limits<difference_type>::max(),
+        std::numeric_limits<size_type>::max() / sizeof(value_type)));
+    }
+    void resize(size_type n, value_type val = value_type()) {
+        if (n > _capacity)
+            
+    }
+    size_type capacity() const {
+        return this->_capacity;
+    }
+    
+    bool empty() const {
+        return (this->_size == 0);
+    }
+    
+    void reserve(size_type n) {
+        if (n > _capacity)
+        {
+            
+        }
+    }
 
-    reference operator[](size_type n) {}
-    const_reference operator[](size_type n) const {}
-    reference at (size_type n) {}
-    const_reference at (size_type n) const {}
-    reference front() {}
-    const_reference front() const {}
-    reference back() {}
-    const_reference back() const {}
+    //element access
 
-    void assign(size_type size, const_reference val);
+    reference operator[](size_type n) {
+        return this->_ptr[n];
+    }
+
+    const_reference operator[](size_type n) const {
+        return this->_ptr[n];        
+    }
+
+    reference at (size_type n) {
+        if (n >= _size)
+            throw std::out_of_range("Vector index out of range");
+        return this->_ptr[n];
+    }
+
+    const_reference at (size_type n) const {
+        if (n >= _size)
+            throw std::out_of_range("Vector index out of range");
+        return this->_ptr[n];    
+    }
+    
+    reference front() {
+        return this->_ptr[0];
+    }
+    const_reference front() const {
+        return this->_ptr[0];
+    }
+    reference back() {
+        return this->_ptr[_size - 1];
+    }
+    const_reference back() const {
+        return this->_ptr[_size - 1];
+    }
+
+    //modifiers
+
+    void assign(size_type size, const_reference val) {
+        
+        for (int i = 0; i < size; i++)
+            _ptr[i] = val;
+    }
+
     void assign(iterator first, iterator last);
     void assign(const_iterator first, const_iterator last);
     void push_back(const value_type& val);
