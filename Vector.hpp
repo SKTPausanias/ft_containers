@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlaplana <mlaplana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/05 13:03:24 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/05 17:34:35 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,10 +144,16 @@ public:
         return (ft::min(std::numeric_limits<difference_type>::max(),
         std::numeric_limits<size_type>::max() / sizeof(value_type)));
     }
+    
     void resize(size_type n, value_type val = value_type()) {
+        if (n < _size)
+            erase(begin() + n, end());
         if (n > _capacity)
-            
+            reserve(n);
+        if (n > _size)
+            insert(end(), n - _size, val);    
     }
+    
     size_type capacity() const {
         return this->_capacity;
     }
@@ -157,9 +163,24 @@ public:
     }
     
     void reserve(size_type n) {
+        if (n > max_size())
+	        throw std::length_error("Vector::resize");
+        if (_capacity == 0)
+        {
+            this->_ptr = static_cast<pointer>(new(sizeof(value_type) * n));
+            this->capacity = n;
+        }
         if (n > _capacity)
         {
-            
+            pointer tmp = static_cast<pointer>(new(sizeof(value_type) * n));
+            if (this->_ptr)
+            {
+                for (size_t i = 0; i < this->_size; i++)
+                    new (&tmp[i]) value_type(this->_ptr[i]);
+                delete(this->_ptr);
+            }
+            this->_capacity = n;
+            this->_ptr = tmp;   
         }
     }
 
