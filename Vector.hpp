@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/05 17:34:35 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/05 21:05:37 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,26 +222,94 @@ public:
     //modifiers
 
     void assign(size_type size, const_reference val) {
-        
-        for (int i = 0; i < size; i++)
-            _ptr[i] = val;
+        clear();
+        insert(begin(), size, val);
     }
 
-    void assign(iterator first, iterator last);
-    void assign(const_iterator first, const_iterator last);
-    void push_back(const value_type& val);
-    void pop_back();
-    iterator insert(iterator position, const value_type& val);
-    void insert(iterator position, size_type n, const value_type& val);
-    void insert(iterator position, iterator first, iterator last);
-    iterator erase(iterator position);
-    iterator erase(iterator first, iterator last);
-    void swap(Vector& x);
-    void clear();
+    void assign(iterator first, iterator last) {
+        clear();
+        insert(begin(), first, last);
+    }
+
+    void assign(const_iterator first, const_iterator last) {
+        clear();
+        insert(begin(), first, last);
+    }
+
+    void push_back(const value_type& val) {
+        insert(end(), val);
+    }
+    
+    void pop_back() {
+        erase(end() - 1);
+    }
+    
+    iterator insert(iterator position, const value_type& val) {
+        insert(position, 1, val);
+        return position;
+    }
+    
+    void insert(iterator position, size_type n, const value_type& val) {
+        size_type index = position._ptr - this->_ptr;
+        if (!n)
+            return ;
+        if (_size + n > _capacity)
+            reserve(_size + n);
+        for (size_t j = _size - 1; j >= index; j--)
+            new(&_ptr[j + n]) value_type(_ptr[j]);
+        for (size_t i = index; i < index + n; i++)
+            new(&_ptr[i]) value_type(val); 
+        _size += n;
+    }
+
+    void insert(iterator position, iterator first, iterator last) {
+        size_type index = position._ptr - this->_ptr;
+        size_type n = last - first;
+        if (!n)
+            return ;
+        if (_size + n > _capacity)
+            reserve(_size + n);
+        for (size_t j = _size - 1; j >= index; j--)
+            new(&_ptr[j + n]) value_type(_ptr[j]);
+        for (size_t i = index; i < index + n; i++)
+            new(&_ptr[i]) value_type(*first++); 
+        _size += n;    
+    }
+    
+    iterator erase(iterator position) {
+        return erase(position, position + 1);
+    }
+    
+    iterator erase(iterator first, iterator last) {
+        size_type n = last - first;
+        if (n <= 0)
+            return last;
+        size_type index = first._ptr - this->_ptr;
+        for (size_t i = index; i < index + n; i++)
+            delete &_ptr[index];
+        for (size_t i = index + n; i < _size; i++)
+        {
+            new (&_ptr[i - n]) value_type(_ptr[i]);
+            delete &_ptr[i];
+        }
+        _size -= n;
+        return first;
+    }
+    
+    void swap(Vector& x) {
+        std::swap(this->_ptr, x._ptr);
+        std::swap(this->_size, x._size);
+        std::swap(this->_capacity, x._capacity); 
+    }
+    
+    void clear() {
+        erase(begin(), end());
+    }
 };
 
 template<class T>
 bool operator!=(Vector<T> const &lhs, Vector<T> const &rhs) {
+    return (lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin()));
 }
 
 template<class T>
