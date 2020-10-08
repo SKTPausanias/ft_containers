@@ -6,28 +6,33 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/06 18:49:33 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/08 13:53:50 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 //#include <vector>
 //#include <list>
-#include "List.hpp"
 #include "Vector.hpp"
 
 int main()
 {
-    Vector<int> first;
-    Vector<int> second (4,100);
-    Vector<int> third (second.begin(),second.end());
-    Vector<int> fourth (third);
-    Vector<int> bar (0,5);
+    ft::Vector<int> first;
+    ft::Vector<int> second(4,100);
+    //first.insert(first.begin(), 10);
+    printf("que paso\n");
 
-    for (Vector<int>::iterator it = first.begin(); it != first.end(); it++)
-        std::cout << *it << " ";    
-    for (Vector<int>::iterator it = second.begin(); it != second.end(); it++)
+    //ft::Vector<int> third (second.begin(),second.end());
+    /*ft::Vector<int> fourth (third);
+    ft::Vector<int> bar (0,5);
+
+    for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
+        std::cout << *it << " ";*/
+    /*printf("llegamos\n");
+    for (ft::Vector<int>::iterator it = second.begin(); it != second.end(); it++)
+
         std::cout << *it << " ";
-    bar = second;
+    //bar = second;
+    printf("no comprendo\n");*/
     return 0;
 }

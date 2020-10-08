@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/06 19:13:59 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/08 13:52:45 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #include "reverseIterator.hpp"
 #include <limits>
 
-//namespace ft
-//{
+namespace ft
+{  
     template<class T>
     class VectorIterator
     {
@@ -78,7 +78,7 @@
         }
     };
 
-    template<class T>
+    template<typename T>
     class Vector
     {
     public:
@@ -97,12 +97,22 @@
         pointer _ptr;
         size_type _size;
         size_type _capacity;
+    	void copy_construct(size_type idx, const_reference val) {
+		    new(&this->_ptr[idx]) value_type(val);
+	    }
     public:
         Vector(): _ptr(nullptr), _size(0), _capacity(0) {}
         
-        Vector(size_type n, const value_type& val = value_type()):
-                _ptr(nullptr), _size(0), _capacity(0) {
-            insert(begin(), n, val);
+        /*Vector(size_type n, const value_type& val = value_type()):
+            _ptr(nullptr), _size(0), _capacity(0) {
+            printf("f\n");
+            this->assign(n, val);
+        }*/
+        
+        Vector(size_type n, const_reference val=value_type()):
+            _ptr(nullptr), _size(0), _capacity(0) {
+            printf("f\n");
+            this->assign(n, val);
         }
         
         Vector(iterator first, iterator last):
@@ -187,16 +197,18 @@
             return (this->_size == 0);
         }
         
-        void reserve(size_type n) {
+        /*void reserve(size_type n) {
+            printf("reserve\n");
             if (n > max_size())
                 throw std::length_error("Vector::resize");
             if (_capacity == 0)
             {
-                this->_ptr = static_cast<pointer>(::operator new(sizeof(value_type) * n));
+                this->_ptr = new value_type[n];
                 this->_capacity = n;
             }
-            if (n > _capacity)
+            else if (n > _capacity)
             {
+                printf("yeso\n");
                 pointer tmp = static_cast<pointer>(::operator new(sizeof(value_type) * n));
                 if (this->_ptr)
                 {
@@ -206,6 +218,47 @@
                 }
                 this->_capacity = n;
                 this->_ptr = tmp;   
+            }
+        }*/
+        
+        /*void reserve(size_type new_cap)
+		{
+			if (new_cap <= _capacity) // no reallocation when not needed
+				return;
+
+			if (!new_cap) // no empty allocation
+				return;
+
+			std::allocator<T> alloc;
+			T *new_arr = alloc.allocate(new_cap);
+			for (size_type i = 0; i < _size; i++)
+			{
+				//alloc.construct(&new_arr[i], _ptr[i]); // call copy constructor
+				//alloc.destroy(&_ptr[i]);			   // call destructor
+			}
+
+			//alloc.deallocate(_ptr, _capacity);
+			_ptr = new_arr;
+			_capacity = new_cap;
+		}*/
+
+        void reserve(size_type size) {
+            if (this->_capacity == 0) {
+                size = (size > 128) ? size : 128;
+                printf("mama\n");
+                this->_ptr = static_cast<value_type*>(::operator new(sizeof(value_type) * size));
+                this->_capacity = size;
+            } else if (size > this->_capacity) {
+                size = (size > this->_capacity * 2) ? size : this->_capacity * 2;
+                value_type *tmp = static_cast<value_type*>(::operator new(sizeof(value_type) * size));
+                if (this->_ptr) {
+                    //std::memmove(static_cast<void*>(tmp), static_cast<void*>(this->container), this->m_size * sizeof(value_type));
+                    for (size_t i = 0; i < this->_size; ++i)
+                        new(&tmp[i]) value_type(this->_ptr[i]);
+                    ::operator delete(this->_ptr);
+                }
+                this->_ptr = tmp;
+                this->_capacity = size;
             }
         }
 
@@ -246,20 +299,40 @@
 
         //modifiers
 
-        void assign(size_type size, const_reference val) {
+        /*void assign(size_type size, const_reference val) {
             clear();
-            insert(begin(), size, val);
+            //printf("hola¿\n");
+            //insert(begin(), size, val);
+        }*/
+
+        void assign(size_type size, const_reference val) {
+            printf("assign\n");
+            if (size > this->_capacity)
+                this->reserve(size);
+            size_t i = 0;
+            while (i < size) {
+                if (i >= this->_size)
+                    this->copy_construct(i, val);
+                else
+                    this->_ptr[i] = val;
+                ++i;
+            }
+            while (i < this->_size)
+                this->_ptr[i++].value_type::~value_type();
+            this->_size = size;
         }
 
-        void assign(iterator first, iterator last) {
+        /*void assign(iterator first, iterator last) {
             clear();
+            printf("no puede ser\n");
             insert(begin(), first, last);
         }
 
         void assign(const_iterator first, const_iterator last) {
             clear();
+            printf("no puede ser\n");
             insert(begin(), first, last);
-        }
+        }*/
 
         void push_back(const value_type& val) {
             insert(end(), val);
@@ -270,26 +343,40 @@
         }
         
         iterator insert(iterator position, const value_type& val) {
-            insert(position, 1, val);
+            size_type init = 1;
+            insert(position, init, val);
             return position;
         }
         
         void insert(iterator position, size_type n, const value_type& val) {
-            size_type index = position._ptr - this->_ptr;
+            iterator it = this->begin();
+            size_type index = 0;
+            while (it != position) {
+                ++it;
+                ++index;
+            }
             if (!n)
                 return ;
-            if (_size + n > _capacity)
-                reserve(_size + n);
-            for (size_t j = _size - 1; j >= index; j--)
+            printf("hola\n");
+            if (_size + n >= _capacity)
+               reserve(_size + n);
+            for (size_t j = _size; j >= 1 && j >= index; j--)
                 new(&_ptr[j + n]) value_type(_ptr[j]);
             for (size_t i = index; i < index + n; i++)
-                new(&_ptr[i]) value_type(val); 
+                new(&_ptr[i]) value_type(val);
+            printf("%d\n", val);
             _size += n;
         }
 
-        void insert(iterator position, iterator first, iterator last) {
-            size_type index = position._ptr - this->_ptr;
+        template<class InputIt>
+        void insert(iterator position, InputIt first, InputIt last) {
+            iterator it = this->begin();
             size_type n = last - first;
+            size_type index = 0;
+            while (it != position) {
+                ++it;
+                ++index;
+            }
             if (!n)
                 return ;
             if (_size + n > _capacity)
@@ -306,8 +393,13 @@
         }
         
         iterator erase(iterator first, iterator last) {
+            iterator it = this->begin();
             size_type n = last - first;
-            size_type index = first._ptr - this->_ptr;
+            size_type index = 0;
+            while (it != first) {
+                ++it;
+                ++index;
+            }
             if (n <= 0)
                 return last;
             for (size_t i = index; i < index + n; i++)
@@ -332,41 +424,41 @@
         }
     };
 
-    template<class T>
+    template<typename T>
     bool operator==(Vector<T> const &lhs, Vector<T> const &rhs) {
         return (lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin()));
     }
 
-    template<class T>
+    template<typename T>
     bool operator!=(Vector<T> const &lhs, Vector<T> const &rhs) {
         return (!(lhs = rhs));
     }
 
-    template<class T>
+    template<typename T>
     bool operator<(Vector<T> const &lhs, Vector<T> const &rhs) {
         return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
     }
 
-    template<class T>
+    template<typename T>
     bool operator<=(Vector<T> const &lhs, Vector<T> const &rhs) {
         return (!(rhs < lhs));
     }
 
-    template<class T>
+    template<typename T>
     bool operator>(Vector<T> const &lhs, Vector<T> const &rhs) {
         return (rhs < lhs);
     }
 
-    template<class T>
+    template<typename T>
     bool operator>=(Vector<T> const &lhs, Vector<T> const &rhs) {
         return (!(lhs < rhs));
     }
 
-    template<class T>
+    template<typename T>
     void swap(Vector<T> &x, Vector<T> &y) {
         x.swap(y);
     }
 
-//}
+}
 
 #endif
