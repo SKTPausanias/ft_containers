@@ -13,6 +13,7 @@
         "memory": "cpp",
         "initializer_list": "cpp",
         "numeric": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "ranges": "cpp"
     }
 }
