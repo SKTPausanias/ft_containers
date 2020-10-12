@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/11 14:31:46 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/12 11:59:42 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include "reverseIterator.hpp"
 #include <limits>
+#include <cstring>
 
 namespace ft
 {  
@@ -93,7 +94,7 @@ namespace ft
         typedef reverseIterator<iterator> reverse_iterator;
         typedef reverseIterator<const_iterator> const_reverse_iterator;
         typedef std::ptrdiff_t difference_type;
-    private:
+    public:
         pointer _ptr;
         size_type _size;
         size_type _capacity;
@@ -107,12 +108,16 @@ namespace ft
         
         Vector(iterator first, iterator last):
             _ptr(nullptr), _size(0), _capacity(0) {
-            insert(begin(), first, last);        
+            insert(begin(), first, last);      
         }
         
         Vector(const Vector& x):
             _ptr(nullptr), _size(0), _capacity(0) {
-            
+            this->_capacity = x._capacity;
+            this->_size = x._size;
+            this->_ptr = new T[_capacity + 1];
+            for (size_t i = 0; i < this->_capacity; i++)
+                this->_ptr[i] = x._ptr[i];
         }
 
         virtual ~Vector() {
@@ -125,6 +130,11 @@ namespace ft
         
         Vector &operator=(const Vector &x) {
             this->clear();
+            this->_capacity = x._capacity;
+            this->_size = x._size;
+            this->_ptr = new T[_capacity + 1];
+            for (size_t i = 0; i < this->_capacity; i++)
+                this->_ptr[i] = x._ptr[i];
             return *this;
         }
 
@@ -308,46 +318,6 @@ namespace ft
             _size += n;
         }
         
-        void insert(iterator position, const_iterator first, const_iterator last) {
-            iterator f = static_cast<iterator>(first);
-            iterator it = this->begin();
-            size_type n = last - first;
-            size_type index = 0;
-            while (it != position) {
-                ++it;
-                ++index;
-            }
-            if (!n)
-                return ;
-            if (_size + n > _capacity)
-                reserve(_size + n);
-            for (size_t j = _size; j >= 1 && j >= index; j--)
-                new(&_ptr[j + n]) value_type(_ptr[j]);
-            for (size_t i = index; i < index + n; i++)
-                new(&_ptr[i]) value_type(*f++); 
-            _size += n;
-        }
-        
-        /*void insert(iterator position, const_iterator first, const_iterator last) {
-            printf("what\n");
-            iterator it = this->begin();
-            size_type n = last - first;
-            size_type index = 0;
-            while (it != position) {
-                ++it;
-                ++index;
-            }
-            if (!n)
-                return ;
-            if (_size + n > _capacity)
-                reserve(_size + n);
-            for (size_t j = _size - 1; j >= 1 && j >= index; j--)
-                new(&_ptr[j + n]) value_type(_ptr[j]);
-            for (size_t i = index; i < index + n; i++)
-                new(&_ptr[i]) value_type(*first++); 
-            _size += n;
-        }*/
-
         iterator erase(iterator position) {
             return erase(position, position + 1);
         }
