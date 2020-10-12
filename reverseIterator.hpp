@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:38:45 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/02 17:24:47 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/12 23:43:52 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <iostream>
 template<class T>
-class reverseIterator
+class reverseIterator : public T
 {
 public:
     typedef T value_type;
@@ -33,7 +33,7 @@ public:
     virtual ~reverseIterator() { }
     
     reverseIterator &operator=(const reverseIterator &c) { _ptr = c._ptr; return *this; }
-    
+
     reference operator*() { 
         pointer tmp(_ptr);
         return *--tmp;

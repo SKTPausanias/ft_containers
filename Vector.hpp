@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/12 11:59:42 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/13 00:13:11 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ namespace ft
         typedef reverseIterator<iterator> reverse_iterator;
         typedef reverseIterator<const_iterator> const_reverse_iterator;
         typedef std::ptrdiff_t difference_type;
-    public:
+    private:
         pointer _ptr;
         size_type _size;
         size_type _capacity;
@@ -280,24 +280,29 @@ namespace ft
             insert(position, init, val);
             return position;
         }
-        
-        void insert(iterator position, size_type n, const value_type& val) {
+
+    	void insert(iterator pos, size_type n, const value_type &value)
+		{
             iterator it = this->begin();
             size_type index = 0;
-            while (it != position) {
+            while (it != pos) {
                 ++it;
                 ++index;
             }
             if (!n)
-                return ;
-            if (_size + n >= _capacity)
-               reserve(_size + n);
-            for (size_t j = _size; j >= 1 && j >= index; j--)
-                new(&_ptr[j + n]) value_type(_ptr[j]);
-            for (size_t i = index; i < index + n; i++)
-                new(&_ptr[i]) value_type(val);
-            _size += n;
-        }
+				return;
+            if (_size + n > _capacity)
+			    reserve(_size + n);
+			std::allocator<T> alloc;
+			for (ptrdiff_t i = _size - 1; i >= (ptrdiff_t)index; i--)
+			{
+				alloc.construct(&_ptr[i + n], _ptr[i]);
+				alloc.destroy(&_ptr[i]);
+			}
+			for (size_type i = index; i < index + n; i++)
+				alloc.construct(&_ptr[i], value); // copy constructor
+			_size += n;
+		}
 
         void insert(iterator position, iterator first, iterator last) {
             iterator it = this->begin();
@@ -311,10 +316,14 @@ namespace ft
                 return ;
             if (_size + n > _capacity)
                 reserve(_size + n);
-            for (size_t j = _size; j >= 1 && j >= index; j--)
-                new(&_ptr[j + n]) value_type(_ptr[j]);
-            for (size_t i = index; i < index + n; i++)
-                new(&_ptr[i]) value_type(*first++); 
+            std::allocator<T> alloc;
+			for (ptrdiff_t i = _size - 1; i >= (ptrdiff_t)index; i--)
+			{
+				alloc.construct(&_ptr[i + n], _ptr[i]);
+				alloc.destroy(&_ptr[i]);
+			}
+			for (iterator ite = first; ite != last; ++ite)
+				alloc.construct(&_ptr[index++], *ite);
             _size += n;
         }
         
