@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/13 17:19:54 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/13 17:33:57 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ namespace ft
         typedef const value_type* const_pointer;
         typedef VectorIterator<value_type> iterator;
         typedef VectorIterator<value_type const> const_iterator;
-        typedef ReverseIterator<iterator> reverse_iterator;
-        typedef ReverseIterator<const_iterator> const_reverse_iterator;
+        typedef reverseIterator<iterator> reverse_iterator;
+        typedef reverseIterator<const_iterator> const_reverse_iterator;
         typedef std::ptrdiff_t difference_type;
     private:
         pointer _ptr;
