@@ -1,105 +1,218 @@
+#ifndef ITERATOR_HPP
+# define ITERATOR_HPP
+
+namespace ft {
+
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   reverseIterator.hpp                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 15:38:45 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/12 23:43:52 by mlaplana         ###   ########.fr       */
-/*                                                                            */
+/* --------------------------- ITERATOR PROTOTYPE --------------------------- */
 /* ************************************************************************** */
 
-#ifndef REVERSEITERATOR_HPP
-#define REVERSEITERATOR_HPP
+template <typename It>
+class ReverseIterator : public It{
+	public:
+		using typename It::value_type;
+		using typename It::pointer;
+		using typename It::const_pointer;
+		using typename It::reference;
+		using typename It::const_reference;
+		using typename It::difference_type;
+    private:
+        pointer p;
+	public:
+		ReverseIterator();
+		ReverseIterator(const It& it);
+		ReverseIterator(const ReverseIterator& copy);
+		virtual ~ReverseIterator();
 
-#include <iostream>
-template<class T>
-class reverseIterator : public T
-{
-public:
-    typedef T value_type;
-    typedef value_type* pointer;
-    typedef const value_type* const_pointer;
-    typedef value_type& reference;
-    typedef const value_type& const_reference;
-    typedef std::ptrdiff_t difference;
-protected:
-    pointer _ptr;
-public:
-    reverseIterator(): _ptr(nullptr) { }
-    reverseIterator(pointer const &ptr): _ptr(ptr) { }
-    reverseIterator(const reverseIterator &c): _ptr(c._ptr) { }
-    virtual ~reverseIterator() { }
-    
-    reverseIterator &operator=(const reverseIterator &c) { _ptr = c._ptr; return *this; }
+		It						base() const;
+		ReverseIterator 		&operator=(ReverseIterator const &copy);
 
-    reference operator*() { 
-        pointer tmp(_ptr);
-        return *--tmp;
-    }
-
-    const_reference operator*() const {
-        pointer tmp(_ptr);
-        return *--tmp;
-    }
-
-    pointer operator->() {
-        pointer tmp(_ptr);
-        return --tmp;
-    }
-
-    const_pointer operator->() const {
-        pointer tmp(_ptr);
-        return --tmp;
-    }
-
-    reverseIterator operator++() {
-        --_ptr;
-        return *this;
-    }
-
-    reverseIterator operator++(int) {
-        reverseIterator tmp = *this;
-        --_ptr;
-        return tmp;
-    }
-
-    reverseIterator operator--() {
-        ++_ptr;
-        return *this;
-    }
-
-    reverseIterator operator--(int) {
-        reverseIterator tmp = *this;
-        ++_ptr;
-        return tmp;
-    }
-
-    reverseIterator operator+(int __n) const {
-        return reverseIterator(_ptr - __n); 
-    }
-    
-    reverseIterator operator+=(int __n) {
-	    _ptr -= __n;
-	    return *this;
-    }
-
-    reverseIterator operator-(int __n) const {
-        return reverseIterator(_ptr + __n); 
-    }
-    
-    reverseIterator operator-=(int __n) {
-	    _ptr += __n;
-	    return *this;
-    }
-
-    bool operator==(const reverseIterator &c) { return this->_ptr == c._ptr; }
-    bool operator!=(const reverseIterator &c) { return (this->_ptr != c._ptr); }
-    bool operator<(const reverseIterator &c) { return (this->_ptr > c._ptr); }
-    bool operator<=(const reverseIterator &c) { return (this->_ptr >= c._ptr); }
-    bool operator>(const reverseIterator &c) { return (this->_ptr < c._ptr); }
-    bool operator>=(const reverseIterator &c) { return (this->_ptr <= c._ptr); }
+		reference 				operator*();
+		const_reference 		operator*() const;
+		pointer					operator->();
+		const_pointer			operator->() const;
+		ReverseIterator&		operator++();
+		ReverseIterator			operator++(int);
+		ReverseIterator&		operator--();
+		ReverseIterator			operator--(int);
+		ReverseIterator			operator+(int value) const;
+		ReverseIterator&		operator+=(int value);
+		ReverseIterator			operator-(int value) const;
+		ReverseIterator&		operator-=(int value);
+		
+		bool					operator!=(const ReverseIterator& obj) const;
+		bool					operator==(const ReverseIterator& obj) const;
+		bool					operator<(const ReverseIterator& obj) const;
+		bool					operator<=(const ReverseIterator& obj) const;
+		bool					operator>(const ReverseIterator& obj) const;
+		bool					operator>=(const ReverseIterator& obj) const;
 };
 
+/* ************************************************************************** */
+/* ------------------------ ITERATOR CANONICAL FORM ------------------------- */
+/* ************************************************************************** */
+
+template <typename It>
+ft::ReverseIterator<It>::ReverseIterator()
+: It() {}
+
+template <typename It>
+ft::ReverseIterator<It>::ReverseIterator(const It& it)
+: It(it) {}
+
+template <typename It>
+ft::ReverseIterator<It>::ReverseIterator(const ft::ReverseIterator<It>& copy)
+: It(copy.p) {}
+
+/* destructor */
+template <typename It>
+ft::ReverseIterator<It>::~ReverseIterator() {}
+
+template <typename It>
+It
+ft::ReverseIterator<It>::base() const
+{
+	It tmp(*this);
+	return (tmp);
+}
+
+/* ************************************************************************** */
+/* --------------------------- ITERATOR OPERATOR ---------------------------- */
+/* ************************************************************************** */
+
+template <typename It>
+ft::ReverseIterator<It>&
+ft::ReverseIterator<It>::operator=(const ft::ReverseIterator<It>& obj)
+{
+	if (this == &obj)
+		return (*this);
+	this->p = obj.p;
+	return (*this);
+}
+
+template <typename It>
+typename ft::ReverseIterator<It>::reference
+ft::ReverseIterator<It>::operator*(void) {
+	It tmp(*this);
+	return (*(--tmp));
+}
+
+template <typename It>
+typename ft::ReverseIterator<It>::const_reference
+ft::ReverseIterator<It>::operator*(void) const {
+	It tmp(*this);
+	return (*(--tmp));
+}
+
+template <typename It>
+typename ft::ReverseIterator<It>::pointer
+ft::ReverseIterator<It>::operator->() {
+	It tmp(*this);
+	return (&(*(--tmp)));
+}
+
+template <typename It>
+typename ft::ReverseIterator<It>::const_pointer
+ft::ReverseIterator<It>::operator->() const {
+	It tmp(*this);
+	return (&(*(--tmp)));
+}
+
+template <typename It>
+ft::ReverseIterator<It>&
+ft::ReverseIterator<It>::operator++(void) {
+	this->It::operator--();
+	return (*this);
+}
+
+template <typename It>
+ft::ReverseIterator<It>
+ft::ReverseIterator<It>::operator++(int) {
+	ReverseIterator<It> tmp(*this);
+	this->operator++();
+	return (tmp);
+}
+
+template <typename It>
+ft::ReverseIterator<It>&
+ft::ReverseIterator<It>::operator--(void) {
+	this->It::operator++();
+	return (*this);
+}
+
+template <typename It>
+ft::ReverseIterator<It>
+ft::ReverseIterator<It>::operator--(int) {
+	ReverseIterator<It> tmp(*this);
+	this->operator--();
+	return (tmp);
+}
+
+template <typename It>
+ft::ReverseIterator<It>&
+ft::ReverseIterator<It>::operator+=(int value)
+{
+	this->It::operator-=(value);
+	return (*this);
+}
+
+template <typename It>
+ft::ReverseIterator<It>
+ft::ReverseIterator<It>::operator+(int value) const {
+	ft::ReverseIterator<It> tmp(*this);
+	return (tmp += value);
+}
+
+template <typename It>
+ft::ReverseIterator<It>&
+ft::ReverseIterator<It>::operator-=(int value)
+{
+	this->It::operator+=(value);
+	return (*this);
+}
+
+template <typename It>
+ft::ReverseIterator<It>
+ft::ReverseIterator<It>::operator-(int value) const {
+	ft::ReverseIterator<It> tmp(*this);
+	return (tmp -= value);
+}
+
+template <typename It>
+bool
+ft::ReverseIterator<It>::operator!=(const ft::ReverseIterator<It>& obj) const {
+	return (this->p != obj.p);
+}
+
+template <typename It>
+bool
+ft::ReverseIterator<It>::operator==(const ft::ReverseIterator<It>& obj) const {
+	return (this->p == obj.p);
+}
+
+template <typename It>
+bool
+ft::ReverseIterator<It>::operator<(const ft::ReverseIterator<It>& obj) const {
+	return (this->p > obj.p);
+}
+
+template <typename It>
+bool
+ft::ReverseIterator<It>::operator<=(const ft::ReverseIterator<It>& obj) const {
+	return (this->p >= obj.p);
+}
+
+template <typename It>
+bool
+ft::ReverseIterator<It>::operator>(const ft::ReverseIterator<It>& obj) const {
+	return (this->p < obj.p);
+}
+
+template <typename It>
+bool
+ft::ReverseIterator<It>::operator>=(const ft::ReverseIterator<It>& obj) const {
+	return (this->p <= obj.p);
+}
+
+}
 #endif

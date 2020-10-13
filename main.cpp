@@ -6,16 +6,17 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/13 00:16:17 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/13 13:44:53 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-//#include <list>
+#include <list>
+#include <vector>
 #include "Vector.hpp"
 
 int main()
-{
+{   
     ft::Vector<int> first;
     ft::Vector<int> second(4, 100);
     ft::Vector<int> third(second.begin(), --second.end());
@@ -63,6 +64,11 @@ int main()
     /*for (ft::Vector<int>::reverse_iterator rit = first.rbegin(); rit != first.rend(); ++rit)
         std::cout << *rit << " ";
     std::cout << "\n";*/
+    ft::Vector<int>::reverse_iterator it = first.rbegin();
+    while (it != first.rend())
+    {
+        std::cout << *it << "\n";
+    }
 
     std::cout << first.size() << "\n";
     std::cout << first.max_size() << "\n";

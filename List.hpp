@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/02 18:17:44 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/13 00:29:43 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ namespace ft
 template <class T>
 class ListIterator
 {
-public:
+public:      
+    typedef List_iterator<T>		_Self;
+    typedef List_node<T>			_Node;
     typedef T value_type;
     typedef value_type& reference;
     typedef const value_type& const_reference;
