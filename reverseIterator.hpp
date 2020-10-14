@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:38:45 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/13 19:28:06 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/14 19:19:26 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,84 +17,65 @@
 
 namespace ft
 {
-template<class T>
-class reverseIterator : public T
+template<class It>
+class reverseIterator : public It
 {
 public:
-    using typename T::value_type;
-    using typename T::pointer;
-    using typename T::const_pointer;
-    using typename T::reference;
-    using typename T::const_reference;
-    using typename T::difference_type;
-protected:
-    T _base;
+    using typename It::value_type;
+    using typename It::pointer;
+    using typename It::const_pointer;
+    using typename It::reference;
+    using typename It::const_reference;
+    using typename It::difference_type;
+private:
+    It _base;
+    reverseIterator();
 public:
-    reverseIterator(): T() { }
-    reverseIterator(T const &base): T(base) { }
-    reverseIterator(const reverseIterator &other): T(other._base) { }
+    reverseIterator(It base): _base(base) { }
+    reverseIterator(const reverseIterator<It> &x): _base(x._base) { }
     virtual ~reverseIterator() { }
-    reverseIterator &operator=(const reverseIterator &c) { _base = c._base; return *this; }
-
-	reference operator*() {
-		T tmp(*this);
+    reverseIterator<It> &operator=(const reverseIterator<It> &x) { this->_base = x._base; return *this; }
+	
+    reference operator*() const {
+		It tmp(_base);
 		return (*--tmp);
 	}
-	const_reference operator*() const {
-		T tmp(*this);
+    
+	const_reference operator*() {
+		It tmp(_base);
 		return (*--tmp);
 	}
 
     pointer operator->() {
-        T tmp(_base);
+        It tmp(_base);
         return &*--tmp;
     }
 
     const_pointer operator->() const {
-        T tmp(_base);
+        It tmp(_base);
         return &*--tmp;
     }
 
-    reverseIterator operator++() {
+    reverseIterator &operator++() {
         --_base;
         return *this;
     }
 
     reverseIterator operator++(int) {
-        reverseIterator tmp(*this);
-        --_base;
+        reverseIterator tmp(_base--);
         return tmp;
     }
 
-    reverseIterator operator--() {
+    reverseIterator &operator--() {
         ++_base;
         return *this;
     }
 
     reverseIterator operator--(int) {
-        reverseIterator tmp(*this);
-        ++_base;
+        reverseIterator tmp(_base++);
         return tmp;
     }
-
-    reverseIterator operator+(int __n) const {
-        return reverseIterator(_base - __n); 
-    }
     
-    reverseIterator operator+=(int __n) {
-	    _base -= __n;
-	    return *this;
-    }
-
-    reverseIterator operator-(int __n) const {
-        return reverseIterator(_base + __n); 
-    }
-    
-    reverseIterator operator-=(int __n) {
-	    _base += __n;
-	    return *this;
-    }
-
     bool operator==(const reverseIterator &c) { return this->_base == c._base; }
     bool operator!=(const reverseIterator &c) { return (this->_base != c._base); }
     bool operator<(const reverseIterator &c) { return (this->_base > c._base); }

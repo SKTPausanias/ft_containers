@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/13 18:47:26 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/14 18:45:54 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,24 @@ int main()
     /*for (ft::Vector<int>::reverse_iterator rit = first.rbegin(); rit != first.rend(); ++rit)
         std::cout << *rit << " ";
     std::cout << "\n";*/
-    ft::Vector<int>::reverse_iterator it = first.rbegin();
-    while (it != first.rend())
-    {
-        std::cout << *it << "\n";
-    }
 
+    ft::Vector<int> vec(2, 2);
+    vec.insert(vec.begin(), 2, 3);
+    std::cout << "normal vector : ";
+    for (ft::Vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+        std::cout << *it << " ";
+    std::cout << "\n";
+    
+    ft::Vector<int>::reverse_iterator it = vec.rbegin(); 
+    ft::Vector<int>::reverse_iterator ite = vec.rend();
+    std::cout << "reverse: ";
+    while (it != ite)
+    {
+        std::cout << *it << " ";
+        it++;
+    }
+    std::cout << "\n";
+    
     std::cout << first.size() << "\n";
     std::cout << first.max_size() << "\n";
     first.resize(9, 6);
