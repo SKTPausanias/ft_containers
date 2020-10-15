@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/14 18:45:54 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/15 13:37:59 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include <vector>
 #include "Vector.hpp"
 
-int main()
-{   
+void test_vector()
+{
     ft::Vector<int> first;
     ft::Vector<int> second(4, 100);
     ft::Vector<int> third(second.begin(), --second.end());
@@ -60,10 +60,6 @@ int main()
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
     std::cout << "\n";
-
-    /*for (ft::Vector<int>::reverse_iterator rit = first.rbegin(); rit != first.rend(); ++rit)
-        std::cout << *rit << " ";
-    std::cout << "\n";*/
 
     ft::Vector<int> vec(2, 2);
     vec.insert(vec.begin(), 2, 3);
@@ -131,7 +127,11 @@ int main()
     first.clear();
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\n";
-    
+    std::cout << "\n";    
+}
+
+int main()
+{
+    test_vector();
     return 0;
 }

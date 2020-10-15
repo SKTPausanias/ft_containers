@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:38:45 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/14 19:19:26 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/15 13:35:19 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ private:
     reverseIterator();
 public:
     reverseIterator(It base): _base(base) { }
-    reverseIterator(const reverseIterator<It> &x): _base(x._base) { }
+    reverseIterator(const reverseIterator &x): _base(x._base) { }
     virtual ~reverseIterator() { }
-    reverseIterator<It> &operator=(const reverseIterator<It> &x) { this->_base = x._base; return *this; }
+    reverseIterator &operator=(const reverseIterator &x) { this->_base = x._base; return *this; }
 	
     reference operator*() const {
 		It tmp(_base);
