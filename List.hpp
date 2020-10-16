@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/16 13:59:53 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/16 18:27:15 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 #define LIST_HPP
 
 #include <iostream>
-
+#include "reverseIterator.hpp"
 namespace ft
 {
-template<class T>
+
+template<typename T>
 struct  _List_Node
 {
     _List_Node* prev;
     _List_Node* next;
-    T el;
 
-    bool operator==(_List_Node x, _List_Node y)
-    {
-        
-    }
+    _List_Node(_List_Node *prev_, _List_Node *next_)
+				: prev(prev_), next(next_) {}
+    T el;
 };
 
 template <class T>
@@ -78,13 +77,45 @@ public:
         return *this;
     }
     
-    bool operator==(const _Self& x, const _Self& y){ return x._p == y._p; }
-    bool operator!=(const _Self& x, const _Self& y){ return x._p != y._p; }
+    template <typename _T>
+	friend bool operator==(const ListIterator<T> &lx, const ListIterator<T> &y);  
 };
+
+template<typename T>
+bool &operator==(const ListIterator<T> &x, const ListIterator<T>& y){
+    return (x._p->el == y._p->el && x._p->next == y._p->next && x._p->prev == y._p->prev);
+}
+
+template<typename T>
+bool &operator!=(const ListIterator<T> &x, const ListIterator<T> &y){
+    return (!(x == y));
+}
 
 template <class T>
 class List
 {
+public:
+    typedef T value_type;
+    typedef value_type& reference;
+    typedef const value_type& const_reference;
+    typedef value_type* pointer;
+    typedef const value_type* const_pointer;
+    typedef ListIterator<value_type> iterator;
+    typedef ListIterator<const value_type> const_iterator;
+    typedef reverseIterator<iterator>  reverse_iterator;
+    typedef reverseIterator<const_iterator> const_reverse_iterator; 
+    typedef std::ptrdiff_t difference_type;
+    typedef size_t size_type;
+private:
+    typedef List<T> _Self;
+    _List_Node<T> *_head;
+    _List_Node<T> *_tail;
+    size_type _n;
+public:
+    List() : _n(0), _head(nullptr), _tail(nullptr) { }
+    List(size_type n, const value_type& val = value_type()): _n(n) {
+        
+    } 
 };
 
 }
