@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/15 13:37:59 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/16 13:55:57 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <list>
 #include <vector>
 #include "Vector.hpp"
+#include "List.hpp"
 
 void test_vector()
 {
@@ -132,6 +133,6 @@ void test_vector()
 
 int main()
 {
-    test_vector();
+    //test_vector();
     return 0;
 }

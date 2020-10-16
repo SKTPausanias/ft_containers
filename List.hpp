@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/13 00:29:43 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/16 13:59:53 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,23 @@
 
 namespace ft
 {
+template<class T>
+struct  _List_Node
+{
+    _List_Node* prev;
+    _List_Node* next;
+    T el;
+
+    bool operator==(_List_Node x, _List_Node y)
+    {
+        
+    }
+};
 
 template <class T>
 class ListIterator
 {
 public:      
-    typedef List_iterator<T>		_Self;
-    typedef List_node<T>			_Node;
     typedef T value_type;
     typedef value_type& reference;
     typedef const value_type& const_reference;
@@ -31,44 +41,45 @@ public:
     typedef const value_type* const_pointer;
     typedef std::ptrdiff_t difference_type;
 protected:
-    pointer _ptr;
+    typedef ListIterator<T> _Self;
+    typedef _List_Node<T> _node;
+    _node* _p;
 public:
-    ListIterator(): _ptr(nullptr) { }
-    ListIterator(const pointer &ptr): _ptr(ptr) { }
-    ListIterator(const ListIterator &c): _ptr(c._ptr) { }
+    ListIterator(): _p(nullptr) { }
+    ListIterator(_node* p): _p(p) { }
+    ListIterator(const ListIterator &x): _p(x._p) { }
     virtual ~ListIterator() {};
-    ListIterator &operator=(const ListIterator &c) {this->_ptr = c._ptr; return *this;}
+    ListIterator &operator=(const ListIterator &x) { this->_p = x._p; return *this; }
     
-    reference operator*() const {return *_ptr;}
-    pointer operator->() const {return _ptr;}
-    ListIterator& operator++() {
-        ++_ptr;
+    reference operator*() const { return _p->el; }
+    pointer operator->() const { return &_p->el; }
+    const_reference operator*() { return _p->el; }
+    const_pointer operator->() { return &_p->el; }
+    
+    _Self& operator++() {
+        _p = _p->next;
         return *this;
     }
     
-    ListIterator operator++(int) { return ListIterator(_ptr++); }
+    _Self operator++(int) { 
+        _Self tmp = *this;
+        _p = _p->next;
+        return tmp;
+    }
     
-    ListIterator& operator--() {
-        --_ptr;
+    _Self& operator--() {
+        _p = _p->prev;
         return *this;
     }
     
-    ListIterator operator--(int) { return ListIterator(_ptr--); }
+    _Self operator--(int) {
+        _Self tmp = *this;
+        _p = _p->prev;
+        return *this;
+    }
     
-    ListIterator operator+=(difference_type _n) { _ptr += _n; return *this; }
-
-    ListIterator operator+(difference_type _n) { return ListIterator(_ptr + _n); }
-
-    ListIterator operator-=(difference_type _n) { _ptr -= _n; return *this; }
-
-    ListIterator operator-(difference_type _n) { return ListIterator(_ptr - _n); }
-
-    bool operator==(const ListIterator &c) { return (this->_ptr == c._ptr); }
-    bool operator!=(const ListIterator &c) { return (this->_ptr != c._ptr); }
-    bool operator<(const ListIterator &c) { return (this->_ptr < c._ptr); }
-    bool operator<=(const ListIterator &c) { return (this->_ptr <= c._ptr); }
-    bool operator>(const ListIterator &c) { return (this->_ptr > c._ptr); }
-    bool operator>=(const ListIterator &c) { return (this->_ptr >= c._ptr); }
+    bool operator==(const _Self& x, const _Self& y){ return x._p == y._p; }
+    bool operator!=(const _Self& x, const _Self& y){ return x._p != y._p; }
 };
 
 template <class T>
