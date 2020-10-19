@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/16 18:27:15 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/19 13:00:03 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,60 @@ private:
     size_type _n;
 public:
     List() : _n(0), _head(nullptr), _tail(nullptr) { }
-    List(size_type n, const value_type& val = value_type()): _n(n) {
-        
-    } 
+    
+    List(size_type n, const value_type& val = value_type()): _n(n) { }
+
+    template<class InputIterator>
+    List(InputIterator first, InputIterator last) { }
+    List(const List& x) { }
+    virtual ~List() { }
+    List &operator=(const List& x) { }
+    iterator begin() { }
+    const_iterator begin() const { }
+    iterator end() { }
+    const_iterator end() const { }
+    reverse_iterator rbegin() { }
+    const_reverse_iterator rbegin() const { }
+    reverse_iterator rend() {}
+    const_reverse_iterator rend() const { }
+    bool empty() const { }
+    size_type size() const;
+    size_type max_size() const;
+    reference front();
+    const_reference front() const;
+    reference back();
+    const_reference back() const;
+    template <class InputIterator>
+    void assign (InputIterator first, InputIterator last);
+    void assign (size_type n, const value_type& val);  
+    void push_front (const value_type& val);
+    void push_back (const value_type& val);
+    void pop_back();
+    iterator insert (iterator position, const value_type& val);
+    void insert (iterator position, size_type n, const value_type& val);
+    template <class InputIterator>
+    void insert (iterator position, InputIterator first, InputIterator last);
+    iterator erase (iterator position);
+    iterator erase (iterator first, iterator last);
+    void swap (List& x);
+    void resize (size_type n, value_type val = value_type());
+    void clear();
+    void splice (iterator position, List& x);
+    void splice (iterator position, List& x, iterator i);
+    void splice (iterator position, List& x, iterator first, iterator last);
+    void remove (const value_type& val);
+    template <class Predicate>
+    void remove_if (Predicate pred);
+    void unique();
+    template <class BinaryPredicate>
+    void unique (BinaryPredicate binary_pred);   
+    void merge (List& x);
+    template <class Compare>
+    void merge (List& x, Compare comp);
+    void sort();
+    template <class Compare>
+    void sort (Compare comp);
+    void reverse();
 };
 
 }
