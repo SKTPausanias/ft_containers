@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/19 13:00:03 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/19 13:18:23 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,17 +112,49 @@ private:
     _List_Node<T> *_tail;
     size_type _n;
 public:
-    List() : _n(0), _head(nullptr), _tail(nullptr) { }
+    List() : _n(0) {
+        _head = new _List_Node<T>(NULL, NULL);
+        _tail = _head;
+    }
     
-    List(size_type n, const value_type& val = value_type()): _n(n) { }
+    List(size_type n, const value_type& val = value_type()): _n(0) {
+        _head = new _List_Node<T>(NULL, NULL);
+        _tail = _head;
+        insert(begin(), n, val);
+    }
 
     template<class InputIterator>
-    List(InputIterator first, InputIterator last) { }
-    List(const List& x) { }
-    virtual ~List() { }
-    List &operator=(const List& x) { }
-    iterator begin() { }
-    const_iterator begin() const { }
+    List(InputIterator first, InputIterator last) {
+        _head = new _List_Node<T>(NULL, NULL);
+        _tail = _head;
+        insert(begin(), first, last);
+    }
+
+    List(const List& x) {
+        _head = new _List_Node<T>(NULL, NULL);
+        _tail = _head;
+        insert(begin(), x.begin(), x.end());
+    }
+    
+    virtual ~List() {
+        this->clear();
+        delete _tail;
+    }
+    
+    List &operator=(const List& x) {
+        this->clear();
+        insert(begin(), x.begin(), x.end());
+        return *this;
+    }
+
+    iterator begin() {
+        return iterator(_head);
+    }
+    
+    const_iterator begin() const {
+        return const_iterator(_head);
+    }
+    
     iterator end() { }
     const_iterator end() const { }
     reverse_iterator rbegin() { }
