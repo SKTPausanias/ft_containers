@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/19 21:01:30 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/20 12:41:50 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include "reverseIterator.hpp"
+#include <algorithm>
 namespace ft
 {
 
@@ -312,9 +313,19 @@ public:
         erase(begin(), end());
     }
     
-    void splice (iterator position, List& x);
-    void splice (iterator position, List& x, iterator i);
-    void splice (iterator position, List& x, iterator first, iterator last);
+    void splice (iterator position, List& x) {
+        for (iterator it = x.begin(); it != x.end(); it++)
+            splice(position, x, it);   
+    }
+    
+    void splice (iterator position, List& x, iterator i) {
+
+    }
+    
+    void splice (iterator position, List& x, iterator first, iterator last) {
+        while (first != last)
+            splice(position, x, first++);
+    }
     
     void remove (const value_type& val) {
         iterator ite = this->end();
@@ -342,18 +353,47 @@ public:
     }
     
     void unique() {
-        
+        unique(equal<T>);
     }
     
     template <class BinaryPredicate>
-    void unique (BinaryPredicate binary_pred);   
-    void merge (List& x);
+    void unique (BinaryPredicate binary_pred) {
+        iterator prev = this->begin();
+        iterator next = prev;
+        iterator last = this->end();
+        while (next != last)
+        {
+            ++next;
+            if (binary_pred(*prev, *next))
+            {
+                erase(next);
+                
+            }
+        }
+        
+    }   
+    
+    void merge (List& x) {
+        
+    }
+    
     template <class Compare>
-    void merge (List& x, Compare comp);
-    void sort();
+    void merge (List& x, Compare comp) {
+
+    }
+    
+    void sort() {
+        
+    }
+    
     template <class Compare>
-    void sort (Compare comp);
-    void reverse();
+    void sort (Compare comp) {
+        
+    }
+    
+    void reverse() {
+        
+    }
 };
 
 }
