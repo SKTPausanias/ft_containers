@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/20 12:41:50 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/20 19:14:01 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include "reverseIterator.hpp"
 #include <algorithm>
+
 namespace ft
 {
 
@@ -242,8 +243,10 @@ public:
         if (position == this->end()) {
             _List_Node<T>* node = new _List_Node<T>(position.base()->prev, nullptr);
             node->el = val;
-            //if (node->prev) ?
-            node->prev->next = node;
+            if (node->prev)
+                node->prev->next = node;
+            else
+                _head = node;
             _tail = node;
             return iterator(node);
         }
@@ -319,7 +322,11 @@ public:
     }
     
     void splice (iterator position, List& x, iterator i) {
-
+        iterator it = x.begin();
+        while (it != i)
+            it++;
+        insert(position, *it);
+        x._n--;
     }
     
     void splice (iterator position, List& x, iterator first, iterator last) {
@@ -353,7 +360,7 @@ public:
     }
     
     void unique() {
-        unique(equal<T>);
+        unique(equal<T>());
     }
     
     template <class BinaryPredicate>
@@ -367,23 +374,35 @@ public:
             if (binary_pred(*prev, *next))
             {
                 erase(next);
-                
+                next = prev;
             }
+            else
+                prev = next;
         }
-        
     }   
     
     void merge (List& x) {
-        
+        return merge(x, less<T>());
     }
     
     template <class Compare>
     void merge (List& x, Compare comp) {
-
+        if (&x == this)
+            return;
+        iterator ite = this->begin();
+        for (iterator it = x.begin(); it != x.end(); it++)
+        {
+            while(ite != this->end() && comp(*ite, *it))
+                ite++;
+            insert(ite, *it);
+        }
+        x._n = 0;
+        x._head = x._tail;
+        x._tail->prev = nullptr; 
     }
     
     void sort() {
-        
+        sort(less<T>());
     }
     
     template <class Compare>
@@ -395,6 +414,43 @@ public:
         
     }
 };
+
+template <class T>
+bool operator==(const List<T>& lhs, const List<T>& rhs) {
+    if (lhs.size() != rhs.size())
+        return false;
+    return equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <typename T>
+bool operator!=(const List<T> &lhs, const List<T> &rhs) {
+    return !(lhs == rhs);
+}
+
+template <typename T>
+bool operator<(const List<T> &lhs, const List<T> &rhs) {
+    return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <typename T>
+bool operator<=(const List<T> &lhs, const List<T> &rhs) {
+    return !(lhs > rhs);
+}
+
+template <typename T>
+bool operator>(const List<T> &lhs, const List<T> &rhs) {
+    return rhs < lhs;
+}
+
+template <typename T>
+bool operator>=(const List<T> &lhs, const List<T> &rhs) {
+    return !(lhs < rhs);
+}
+
+template <typename T>
+void swap(List<T> &x, List<T> &y) {
+    x.swap(y);
+}
 
 }
 
