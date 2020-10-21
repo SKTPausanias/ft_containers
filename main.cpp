@@ -6,12 +6,12 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/21 17:08:05 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/21 20:57:52 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-//#include <list>
+#include <list>
 //#include <vector>
 #include "Vector.hpp"
 #include "List.hpp"
@@ -133,10 +133,28 @@ void test_vector()
 
 void test_list()
 {
-  ft::List<int> first;                                // empty list of ints
-  ft::List<int> second (4,100);                       // four ints with value 100
-  ft::List<int> third (second.begin(),second.end());  // iterating through second
-  ft::List<int> fourth (third);
+    ft::List<int> first;                                // empty list of ints
+    ft::List<int> second (4,100);                       // four ints with value 100
+    ft::List<int> third (second.begin(),second.end());  // iterating through second
+    ft::List<int> fourth (third);
+
+    std::cout << "first: ";
+    for (ft::List<int>::iterator it = first.begin(); it != first.end(); it++)
+        std::cout << *it << " ";
+    std::cout << "\nsecond: ";
+    for (ft::List<int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << *it << " ";
+        
+    /*std::list<int> first;                                // empty list of ints
+    std::list<int> second (1,4);
+    second.insert(second.begin(), 3);
+    second.insert(second.begin(), 2);
+    second.insert(second.begin(), 1);
+    for (std::list<int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << *it << " ";
+    std::list<int> third (second.begin(),second.end());
+    for (std::list<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " "; */
 }
 
 int main()

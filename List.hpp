@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/21 20:09:33 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/21 21:13:45 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,10 @@ public:
             _tail = node;
             return iterator(node);
         }
-        _List_Node<T>* node = new _List_Node<T>(this->end().base()->prev, nullptr);
+        std::cout << *this->end() << "\n";
+        _List_Node<T>* node = new _List_Node<T>(_tail->prev, nullptr);
+        if (_tail->prev)
+            _tail->prev->next = node;
         _tail = node;
         iterator i(this->end());
         while (i != position)
@@ -284,11 +287,13 @@ public:
    void insert (iterator position, const_iterator first, const_iterator last) {
         while (first != last)
             this->insert(position, *first++);
+            //position++?
     }
 
     void insert (iterator position, iterator first, iterator last) {
         while (first != last)
             this->insert(position, *first++);
+            //position++?
     }
     
     iterator erase (iterator position)
