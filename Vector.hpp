@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/14 19:18:05 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/21 17:07:39 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,7 +371,7 @@ namespace ft
 
     template<typename T>
     bool operator!=(Vector<T> const &lhs, Vector<T> const &rhs) {
-        return (!(lhs = rhs));
+        return (!(lhs == rhs));
     }
 
     template<typename T>

@@ -6,13 +6,13 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/16 13:55:57 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/21 17:08:05 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include <list>
-#include <vector>
+//#include <list>
+//#include <vector>
 #include "Vector.hpp"
 #include "List.hpp"
 
@@ -131,8 +131,17 @@ void test_vector()
     std::cout << "\n";    
 }
 
+void test_list()
+{
+  ft::List<int> first;                                // empty list of ints
+  ft::List<int> second (4,100);                       // four ints with value 100
+  ft::List<int> third (second.begin(),second.end());  // iterating through second
+  ft::List<int> fourth (third);
+}
+
 int main()
 {
     //test_vector();
+    test_list();
     return 0;
 }

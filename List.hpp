@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/20 19:14:01 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/21 19:00:39 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,26 @@ public:
         _p = _p->prev;
         return *this;
     }
-    
-    template <typename _T>
-        friend bool operator==(const ListIterator<T> &lx, const ListIterator<T> &y);  
+
+	bool operator==(ListIterator const &other) const {
+		return (this->_p == other._p);
+	}
+	bool operator!=(ListIterator const &other) const {
+		return (this->_p != other._p);
+	}
+	bool operator<(ListIterator const &other) const {
+		return (this->_p < other._p);
+	}
+	bool operator<=(ListIterator const &other) const {
+		return (this->_p <= other._p);
+	}
+	bool operator>(ListIterator const &other) const {
+		return (this->_p > other._p);
+	}
+	bool operator>=(ListIterator const &other) const {
+		return (this->_p >= other._p);
+	}
 };
-
-template<typename T>
-bool &operator==(const ListIterator<T> &x, const ListIterator<T>& y){
-    return (x._p->el == y._p->el && x._p->next == y._p->next && x._p->prev == y._p->prev);
-}
-
-template<typename T>
-bool &operator!=(const ListIterator<T> &x, const ListIterator<T> &y){
-    return (!(x == y));
-}
 
 template <class T>
 class List
@@ -158,7 +164,7 @@ public:
     }
     
     const_iterator begin() const {
-        return const_iterator(_head);
+		return const_iterator(_head);
     }
     
     iterator end() {
@@ -212,8 +218,12 @@ public:
         return _tail->prev->el;
     }
     
-    template <class InputIterator>
-    void assign (InputIterator first, InputIterator last) {
+    void assign (iterator first, iterator last) {
+        clear();
+        insert(begin(), first, last);
+    }
+
+    void assign (const_iterator first, const_iterator last) {
         clear();
         insert(begin(), first, last);
     }
@@ -269,10 +279,14 @@ public:
             this->insert(position, val);
     }
     
-    template <class InputIterator>
-    void insert (iterator position, InputIterator first, InputIterator last) {
+   void insert (iterator position, const_iterator first, const_iterator last) {
         while (first != last)
-            insert(position, *first++);
+            this->insert(position, *first++);
+    }
+
+    void insert (iterator position, iterator first, iterator last) {
+        while (first != last)
+            this->insert(position, *first++);
     }
     
     iterator erase (iterator position)
@@ -294,13 +308,14 @@ public:
         }
         delete _tail;
         _n--;
-        _tail = --position;
+        --position;
+        _tail = position.base();
         return i;
     }
     
     iterator erase (iterator first, iterator last) {
         while (first != last)
-            erase(first++)
+            erase(first++);
         return (first);
     }
     
@@ -360,7 +375,7 @@ public:
     }
     
     void unique() {
-        unique(equal<T>());
+        unique(std::equal<T>());
     }
     
     template <class BinaryPredicate>
@@ -382,7 +397,7 @@ public:
     }   
     
     void merge (List& x) {
-        return merge(x, less<T>());
+        return merge(x, std::less<T>());
     }
     
     template <class Compare>
@@ -402,20 +417,52 @@ public:
     }
     
     void sort() {
-        sort(less<T>());
+        sort(std::less<T>());
     }
     
     template <class Compare>
     void sort (Compare comp) {
-        
+        if (this->_n <= 1)
+            return;
+        iterator first = this->begin();
+        iterator last = this->end();        
+        while (first != last)
+        {
+            iterator next = first;
+            while(++next != last)
+            {
+                if (comp(*first, *next))
+                {
+                    T tmp;
+                    tmp = first.base()->el;
+                    first.base()->el = next.base()->el;
+                    next.base()->el = tmp;
+                }
+            }
+            ++first;
+        }
     }
     
     void reverse() {
-        
+        if (this->_n <= 1)
+            return;
+	    iterator first = this->begin();
+	    iterator last = --this->end();
+
+        size_type limit = this->_n / 2;
+        for (size_t i = 0; i < limit; i++)
+        {
+            T tmp;
+            tmp = first.base()->el;
+            first.base()->el = last.base()->el;
+            last.base()->el = tmp;
+            ++first;
+            --last;
+        }
     }
 };
 
-template <class T>
+template <typename T>
 bool operator==(const List<T>& lhs, const List<T>& rhs) {
     if (lhs.size() != rhs.size())
         return false;
