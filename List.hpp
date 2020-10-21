@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/21 19:00:39 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/21 20:09:33 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,8 @@ public:
     }
     
     const_iterator begin() const {
-		return const_iterator(_head);
+        typedef _List_Node<const T> const_node;
+		return const_iterator(reinterpret_cast<const_node *>(_head));
     }
     
     iterator end() {
@@ -172,7 +173,8 @@ public:
     }
 
     const_iterator end() const {
-        return const_iterator(_tail);
+        typedef _List_Node<const T> const_node;
+		return const_iterator(reinterpret_cast<const_node *>(_head));
     }
 
     reverse_iterator rbegin() {
