@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/22 10:25:40 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/22 14:32:40 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,7 @@ public:
         insert(begin(), n, val);
     }
 
-    template<class InputIterator>
-    List(InputIterator first, InputIterator last) {
+    List(iterator first, iterator last) {
         _head = new _List_Node<T>(NULL, NULL);
         _tail = _head;
         insert(begin(), first, last);
@@ -149,7 +148,7 @@ public:
     }
     
     virtual ~List() {
-        this->clear();
+        //this->clear();
         delete _tail;
     }
     
@@ -252,55 +251,58 @@ public:
     }
 
     iterator insert (iterator position, const value_type& val) {
-        if (position == this->begin()) {
-            _List_Node<T>* node = new _List_Node<T>(nullptr, _head);
-            node->el = val;
-            if (node->next)
-                node->next->prev = node;
+        if (position == this->begin())
+        {
+            printf("begin\n");
+            if (this->_n == 0)
+            {
+                _head->el = val;
+                _n++;
+                return iterator(this->begin());
+            }
             else
-                _tail = node;
-            _head = node;
-            _n++;
-            return iterator(_head);
+            {
+                _List_Node<T>* node = new _List_Node<T>(nullptr, _head);
+                node->el = val;
+                _head->prev = node;
+                _head = node;
+                _n++;
+                return iterator(this->begin());
+            }
         }
-        else if (position == this->end()) {
+        else if (position == this->end())
+        {
+            printf("end\n");
             _List_Node<T>* node = new _List_Node<T>(_tail, nullptr);
             node->el = val;
-            if (node->prev)
-                node->prev->next = node;
+            node->prev->next = node;
             _tail = node;
             _n++;
-            return iterator(_tail);
+            return iterator(this->end());
         }
-        else {
-            _List_Node<T>* node = new _List_Node<T>(position.base(), position.base()->next);
+        else
+        {
+            printf("else\n");
+            _List_Node<T>* node = new _List_Node<T>(nullptr, nullptr);
             node->el = val;
-            node->next->prev = node;
-            position.base()->next = node;
+            if (position.base()->prev)
+            {
+                node->prev = position.base()->prev;
+                position.base()->prev->next = node;
+            }
+            node->next = position.base();
+            position.base()->prev = node;
             _n++;
             return iterator(node);
         }
-    }    
-    /*    std::cout << *this->end() << "\n";
-        _List_Node<T>* node = new _List_Node<T>(_tail->prev, nullptr);
-        if (_tail->prev)
-            _tail->prev->next = node;
-        _tail = node;
-        iterator i(this->end());
-        while (i != position)
-        {
-            i.base()->el = i.base()->prev->el;
-            i.base()->prev->next = i.base();
-            i--;
-        }
-        position.base()->el = val;
-        _n++;
-        return iterator(position);
-    }*/
+    }
     
     void insert (iterator position, size_type n, const value_type& val) {
         for (size_type i = 0; i < n; i++)
+        {
+            printf("iter %zu\n", i);
             this->insert(position, val);
+        }
     }
     
    void insert (iterator position, const_iterator first, const_iterator last) {
@@ -313,6 +315,7 @@ public:
         while (first != last)
             this->insert(position, *first++);
             //position++?
+        printf("aqui\n");
     }
     
     iterator erase (iterator position)

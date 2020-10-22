@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/21 20:57:52 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/22 14:32:13 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,14 +128,18 @@ void test_vector()
     first.clear();
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\n";    
+    std::cout << "\n";
 }
 
 void test_list()
 {
     ft::List<int> first;                                // empty list of ints
-    ft::List<int> second (4,100);                       // four ints with value 100
-    ft::List<int> third (second.begin(),second.end());  // iterating through second
+    //ft::List<int> second(4,100);                       // four ints with value 100
+    first.insert(first.begin(), 1);
+    first.insert(first.begin(), 2);
+    first.insert(first.begin(), 3);
+    printf("queque\n");
+    /*ft::List<int> third (second.begin(),second.end());  // iterating through second
     ft::List<int> fourth (third);
 
     std::cout << "first: ";
@@ -145,7 +149,7 @@ void test_list()
     for (ft::List<int>::iterator it = second.begin(); it != second.end(); it++)
         std::cout << *it << " ";
         
-    /*std::list<int> first;                                // empty list of ints
+    std::list<int> first;                                // empty list of ints
     std::list<int> second (1,4);
     second.insert(second.begin(), 3);
     second.insert(second.begin(), 2);
@@ -161,5 +165,6 @@ int main()
 {
     //test_vector();
     test_list();
+    printf("ayay\n");
     return 0;
 }
