@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/22 14:32:13 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/22 14:55:48 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,37 +134,34 @@ void test_vector()
 void test_list()
 {
     ft::List<int> first;                                // empty list of ints
-    //ft::List<int> second(4,100);                       // four ints with value 100
-    first.insert(first.begin(), 1);
-    first.insert(first.begin(), 2);
+    ft::List<int> second(4,100);                       // four ints with value 100
+    
+    first.insert(first.begin(), 4);
     first.insert(first.begin(), 3);
-    printf("queque\n");
-    /*ft::List<int> third (second.begin(),second.end());  // iterating through second
+    first.insert(first.begin(), 2);
+    first.insert(first.begin(), 1);
+    
+    ft::List<int> third (first.begin(),first.end());
     ft::List<int> fourth (third);
-
-    std::cout << "first: ";
+    
+    std::cout << "first:";
     for (ft::List<int>::iterator it = first.begin(); it != first.end(); it++)
-        std::cout << *it << " ";
-    std::cout << "\nsecond: ";
+        std::cout << *it << " ";   
+    std::cout << "\nsecond";
     for (ft::List<int>::iterator it = second.begin(); it != second.end(); it++)
         std::cout << *it << " ";
-        
-    std::list<int> first;                                // empty list of ints
-    std::list<int> second (1,4);
-    second.insert(second.begin(), 3);
-    second.insert(second.begin(), 2);
-    second.insert(second.begin(), 1);
-    for (std::list<int>::iterator it = second.begin(); it != second.end(); it++)
+    std::cout << "\nthird:";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
         std::cout << *it << " ";
-    std::list<int> third (second.begin(),second.end());
-    for (std::list<int>::iterator it = third.begin(); it != third.end(); it++)
-        std::cout << *it << " "; */
+    std::cout << "\nfourth:";
+    for (ft::List<int>::iterator it = fourth.begin(); it != fourth.end(); it++)
+        std::cout << *it << " ";
+    std::cout << "\n";
 }
 
 int main()
 {
     //test_vector();
     test_list();
-    printf("ayay\n");
     return 0;
 }
