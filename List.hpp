@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/21 21:13:45 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/22 10:25:40 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,17 +252,36 @@ public:
     }
 
     iterator insert (iterator position, const value_type& val) {
-        if (position == this->end()) {
-            _List_Node<T>* node = new _List_Node<T>(position.base()->prev, nullptr);
+        if (position == this->begin()) {
+            _List_Node<T>* node = new _List_Node<T>(nullptr, _head);
+            node->el = val;
+            if (node->next)
+                node->next->prev = node;
+            else
+                _tail = node;
+            _head = node;
+            _n++;
+            return iterator(_head);
+        }
+        else if (position == this->end()) {
+            _List_Node<T>* node = new _List_Node<T>(_tail, nullptr);
             node->el = val;
             if (node->prev)
                 node->prev->next = node;
-            else
-                _head = node;
             _tail = node;
+            _n++;
+            return iterator(_tail);
+        }
+        else {
+            _List_Node<T>* node = new _List_Node<T>(position.base(), position.base()->next);
+            node->el = val;
+            node->next->prev = node;
+            position.base()->next = node;
+            _n++;
             return iterator(node);
         }
-        std::cout << *this->end() << "\n";
+    }    
+    /*    std::cout << *this->end() << "\n";
         _List_Node<T>* node = new _List_Node<T>(_tail->prev, nullptr);
         if (_tail->prev)
             _tail->prev->next = node;
@@ -277,7 +296,7 @@ public:
         position.base()->el = val;
         _n++;
         return iterator(position);
-    }
+    }*/
     
     void insert (iterator position, size_type n, const value_type& val) {
         for (size_type i = 0; i < n; i++)
