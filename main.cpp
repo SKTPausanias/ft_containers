@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/22 14:55:48 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/23 15:17:43 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,16 +144,16 @@ void test_list()
     ft::List<int> third (first.begin(),first.end());
     ft::List<int> fourth (third);
     
-    std::cout << "first:";
+    std::cout << "first: ";
     for (ft::List<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";   
-    std::cout << "\nsecond";
+    std::cout << "\nsecond: ";
     for (ft::List<int>::iterator it = second.begin(); it != second.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\nthird:";
+    std::cout << "\nthird: ";
     for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\nfourth:";
+    std::cout << "\nfourth: ";
     for (ft::List<int>::iterator it = fourth.begin(); it != fourth.end(); it++)
         std::cout << *it << " ";
     std::cout << "\n";

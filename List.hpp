@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/22 14:58:55 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/23 15:16:51 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ public:
 
     const_iterator end() const {
         typedef _List_Node<const T> const_node;
-		return const_iterator(reinterpret_cast<const_node *>(_head));
+		return const_iterator(reinterpret_cast<const_node *>(_tail));
     }
 
     reverse_iterator rbegin() {
@@ -264,10 +264,10 @@ public:
         {
             _List_Node<T>* node = new _List_Node<T>(nullptr, nullptr);
             node->el = val;
-            if (this->_n == 0)
-                this->_tail->insert_before(node);
-            else
-                this->_head->insert_before(node);
+            //if (this->_n == 0)
+            //    this->_tail->insert_before(node);
+            //else
+            this->_head->insert_before(node);
             this->_head = node;
             _n++;
             return iterator(this->begin());
@@ -277,8 +277,8 @@ public:
             _List_Node<T>* node = new _List_Node<T>(nullptr, nullptr);
             node->el = val;
             this->_tail->insert_before(node);
-            if (_n == 0)
-                this->_head = node;
+            //if (_n == 0)
+                //this->_head = node;
             _n++;
             return iterator(this->end());
         }
@@ -295,6 +295,11 @@ public:
     void insert (iterator position, size_type n, const value_type& val) {
         for (size_type i = 0; i < n; i++)
             this->insert(position, val);
+    }
+    
+   void insert (iterator position, const_iterator first, const_iterator last) {
+        while (first != last)
+            this->insert(position, *first++);
     }
 
     void insert (iterator position, iterator first, iterator last) {
