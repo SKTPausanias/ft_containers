@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/23 15:17:43 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/23 18:46:55 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void test_vector()
 void test_list()
 {
     ft::List<int> first;                                // empty list of ints
-    ft::List<int> second(4,100);                       // four ints with value 100
+    /*ft::List<int> second(4,100);                       // four ints with value 100
     
     first.insert(first.begin(), 4);
     first.insert(first.begin(), 3);
@@ -157,6 +157,44 @@ void test_list()
     for (ft::List<int>::iterator it = fourth.begin(); it != fourth.end(); it++)
         std::cout << *it << " ";
     std::cout << "\n";
+
+    ft::List<int>::reverse_iterator it = third.rbegin(); 
+    ft::List<int>::reverse_iterator ite = third.rend();
+    std::cout << "reverse: ";
+    while (it != ite)
+    {
+        std::cout << *it << " ";
+        it++;
+    }
+    
+    std::cout << "\nsize: ";
+
+    std::cout << third.size() << "\nmax_size: ";
+    std::cout << third.max_size() << "\nthird empty?: ";
+
+    if (third.empty() == false)
+        std::cout << "not empty\n";
+    else
+        std::cout << "empty\n";
+
+    std::cout << "front: " << third.front() << "\n";
+    std::cout << "back: " << third.back() << "\n";*/
+
+    std::cout << "assign: ";
+    first.assign(2, 4);
+    for (ft::List<int>::iterator it = first.begin(); it != first.end(); it++)
+        std::cout << *it << " ";
+    std::cout << "\nerase begin: ";
+    first.erase(first.begin());
+    for (ft::List<int>::iterator it = first.begin(); it != first.end(); it++)
+        std::cout << *it << " ";
+        
+    /*third.push_front(6);
+    third.push_back(6);
+    //third.clear();
+    std::cout << "\nthird, push_front(6) and push_back(6): ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";*/
 }
 
 int main()

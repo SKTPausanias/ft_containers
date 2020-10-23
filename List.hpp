@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/23 15:16:51 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/23 18:43:03 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ public:
     }
     
     virtual ~List() {
-        //this->clear();
+        this->clear();
         delete _tail;
     }
     
@@ -309,26 +309,15 @@ public:
     
     iterator erase (iterator position)
     {
-        if (position == this->end()) {
-            if (position.base()->prev) {
-                position.base()->prev->next = nullptr;
-                _tail = position.base()->prev;
-            }
-            delete position.base();
-            _n--;
-            return this->end();
-        }
-        iterator i(position);
-        while (position != this->end())
-        {
-            position.base()->el = position.base()->next->el;
-            position++;
-        }
-        delete _tail;
+        _List_Node<T> *left = position.base()->prev;
+        _List_Node<T> *right = position.base()->next;
+        if (left)
+            left->next = right;
+        else 
+            _head = right;
+        delete position.base();
         _n--;
-        --position;
-        _tail = position.base();
-        return i;
+        return iterator(right);
     }
     
     iterator erase (iterator first, iterator last) {
