@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 17:08:26 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/26 18:26:02 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,9 @@ void test_vector()
     std::cout << "\n";
 }
 
+bool single_digit (const int& value) { return (value<10); }
+
+
 void test_list()
 {
     ft::List<int> first;                                // empty list of ints
@@ -236,10 +239,72 @@ void test_list()
         std::cout << *it << " ";
     third.clear();
 
+    third.push_front(42);
+    third.push_front(10);
     third.push_front(3);
     third.push_front(2);
     third.push_front(1);
-    std::cout << "\n";
+    std::cout << "\nnew list :";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+
+    third.remove(4);
+    std::cout << "\nremove(4): ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+
+    third.remove(2);
+    std::cout << "\nremove(2): ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    
+    third.remove_if(single_digit);
+    std::cout << "\nremove_if(single_digit): ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+
+    third.push_front(3);
+    third.push_front(3);
+    third.push_front(3);
+    third.push_front(2);
+    third.push_front(2);
+    third.push_front(1);
+    std::cout << "\nnew list :";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+
+    third.unique();
+    std::cout << "\nthird.unique() :";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    
+    first.clear();
+    first.push_front(6);
+    first.push_front(5);
+    first.push_front(4);
+    
+    third.merge(first);
+    std::cout << "\nfirst = 4,5,6 third.merge(first) :";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    
+    std::cout << "\nfirst size: " << first.size();
+    
+    third.push_front(12);
+    third.push_front(7);
+    third.push_front(22);
+    
+    std::cout << "\nthird unsortered :";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    
+    third.sort();
+    std::cout << "\nthird sortered :";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    
+    third.reverse();
+    std::cout << "\nthird reversed :";
     for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
         std::cout << *it << " ";
 }

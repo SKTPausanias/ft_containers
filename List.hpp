@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 16:59:45 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/26 18:24:23 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,12 +429,14 @@ public:
         }        
     }
     
-    void unique() {
-        unique(std::equal<T>());
-    }
-    
-    template <class BinaryPredicate>
-    void unique (BinaryPredicate binary_pred) {
+	void unique()
+	{
+		this->unique(&equal<value_type>);
+	}
+
+	template <typename BinaryPredicate>
+	void unique(BinaryPredicate binary_pred)
+    {
         iterator prev = this->begin();
         iterator next = prev;
         iterator last = this->end();
@@ -472,7 +474,7 @@ public:
     }
     
     void sort() {
-        sort(std::less<T>());
+        sort(std::greater<T>());
     }
     
     template <class Compare>
@@ -480,7 +482,8 @@ public:
         if (this->_n <= 1)
             return;
         iterator first = this->begin();
-        iterator last = this->end();        
+        iterator last = this->end();
+        iterator tmp; 
         while (first != last)
         {
             iterator next = first;

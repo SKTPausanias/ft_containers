@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:38:45 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/15 13:35:19 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/26 17:32:03 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,11 @@ public:
     bool operator>(const reverseIterator &c) { return (this->_base < c._base); }
     bool operator>=(const reverseIterator &c) { return (this->_base <= c._base); }
 };
+
+template<class value_type>
+bool equal(value_type const &a, value_type const &b) {
+	return (a == b);
+}
 
 }
 
