@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/23 18:46:55 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/26 13:53:59 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void test_vector()
 void test_list()
 {
     ft::List<int> first;                                // empty list of ints
-    /*ft::List<int> second(4,100);                       // four ints with value 100
+    ft::List<int> second(4,100);                       // four ints with value 100
     
     first.insert(first.begin(), 4);
     first.insert(first.begin(), 3);
@@ -178,7 +178,7 @@ void test_list()
         std::cout << "empty\n";
 
     std::cout << "front: " << third.front() << "\n";
-    std::cout << "back: " << third.back() << "\n";*/
+    std::cout << "back: " << third.back() << "\n";
 
     std::cout << "assign: ";
     first.assign(2, 4);
@@ -189,12 +189,13 @@ void test_list()
     for (ft::List<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
         
-    /*third.push_front(6);
+    third.push_front(6);
     third.push_back(6);
-    //third.clear();
+
     std::cout << "\nthird, push_front(6) and push_back(6): ";
     for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
-        std::cout << *it << " ";*/
+        std::cout << *it << " ";
+    
 }
 
 int main()
