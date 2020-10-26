@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 18:24:23 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/26 18:53:25 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,15 +375,13 @@ public:
                 this->pop_back();            
         }
         else if (n > _n)
-        {
             this->insert(this->end(), n - _n, val);
-        }
     }
     
     void clear() {
         erase(begin(), end());
-        _head = new _List_Node<T>(NULL, NULL);
-        _tail = _head;
+        //_head = new _List_Node<T>(NULL, NULL);
+        //_tail = _head;
     }
     
     void splice (iterator position, List& x) {
@@ -468,9 +466,9 @@ public:
                 ite++;
             insert(ite, *it);
         }
+        x.clear();
         x._n = 0;
-        x._head = x._tail;
-        x._tail->prev = nullptr; 
+        delete x._head;
     }
     
     void sort() {

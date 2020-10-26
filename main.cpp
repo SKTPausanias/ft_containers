@@ -6,15 +6,14 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 18:26:02 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/26 18:53:58 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include <list>
-//#include <vector>
 #include "Vector.hpp"
 #include "List.hpp"
+#include <list>
 
 void test_vector()
 {
@@ -125,17 +124,13 @@ void test_vector()
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
     std::cout << "\n";
-    first.clear();
-    for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
-        std::cout << *it << " ";
-    std::cout << "\n";
 }
 
 bool single_digit (const int& value) { return (value<10); }
 
 
 void test_list()
-{
+{   
     ft::List<int> first;                                // empty list of ints
     ft::List<int> second(4,100);                       // four ints with value 100
     
