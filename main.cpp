@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 13:53:59 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/26 17:08:26 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,10 +177,10 @@ void test_list()
     else
         std::cout << "empty\n";
 
-    std::cout << "front: " << third.front() << "\n";
-    std::cout << "back: " << third.back() << "\n";
+    std::cout << "third.front(): " << third.front() << "\n";
+    std::cout << "third.back(): " << third.back() << "\n";
 
-    std::cout << "assign: ";
+    std::cout << "assign first: ";
     first.assign(2, 4);
     for (ft::List<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
@@ -196,6 +196,52 @@ void test_list()
     for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
         std::cout << *it << " ";
     
+    third.pop_front();
+    third.pop_back();
+    
+    std::cout << "\nthird, pop_front() and pop_back(): ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    
+    first.swap(third);
+
+    std::cout << "\n first.swap(third): ";
+    for (ft::List<int>::iterator it = first.begin(); it != first.end(); it++)
+        std::cout << *it << " ";
+    
+    first.swap(third);
+    third.resize(2);
+    third.resize(8,100);
+    std::cout << "\nthird.resize(2); \n third.resize(8,100): ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    
+    first.push_front(1);
+    first.push_front(2);
+    third.splice(third.end(), first);
+    std::cout << "\nthird.splice(third.end(), first); : ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+
+    third.splice(third.end(), first, first.end());
+    
+    std::cout << "\nthird.splice(third.end(), first, first.end()); : ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    
+    third.splice(third.end(), first, first.begin(), first.end());
+
+    std::cout << "\nthird.splice(third.end(), first, first.begin(), first.end()); : ";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
+    third.clear();
+
+    third.push_front(3);
+    third.push_front(2);
+    third.push_front(1);
+    std::cout << "\n";
+    for (ft::List<int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << *it << " ";
 }
 
 int main()

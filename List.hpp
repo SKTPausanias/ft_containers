@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 13:53:41 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/26 16:59:45 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ public:
     }
     
     void pop_back() {
-        erase(--end());
+        erase(end());
     }
 
     iterator insert (iterator position, const value_type& val) {
@@ -309,15 +309,50 @@ public:
     
     iterator erase (iterator position)
     {
-        _List_Node<T> *left = position.base()->prev;
-        _List_Node<T> *right = position.base()->next;
-        if (left)
-            left->next = right;
-        else 
-            _head = right;
-        delete position.base();
-        _n--;
-        return iterator(right);
+        if (position == this->begin()) {
+            if (_n == 1)
+            {
+                delete this->_head;
+                this->_head = this->_tail;
+                this->_tail->prev = nullptr;
+            }
+            else if (_n >= 1)
+            {
+                _List_Node<T> *tmp = this->_head->next;
+                if (_head->prev)
+                    _head->prev->next = _head->next;
+                if (_head->next)
+                    _head->next->prev = _head->prev;
+                delete this->_head;
+                this->_head = tmp;
+            }
+            --_n;
+            return (this->begin());
+        } 
+        else if (position == this->end()) {
+            if (_n == 1)
+                return erase(this->begin());
+            else if (_n >= 1)
+            {
+                _List_Node<T> *tmp = this->_tail->prev;
+                if (_tail->prev->prev)
+                    _tail->prev->prev->next = _tail->prev->next;
+                if (_tail->prev->next)
+                    _tail->prev->next->prev = _tail->prev->prev;
+                delete tmp;
+                --_n;
+            }
+            return (this->end());
+        }
+        else
+        {
+            _List_Node<T>* node_right = position.base()->next;
+            position.base()->next->prev = position.base()->prev;
+            position.base()->prev->next = position.base()->next;
+            delete position.base();
+            _n--;
+            return iterator(node_right);
+        }
     }
     
     iterator erase (iterator first, iterator last) {
@@ -332,7 +367,18 @@ public:
         std::swap(_n, x._n);
     }
     
-    void resize (size_type n, value_type val = value_type());
+    void resize (size_type n, value_type val = value_type()) 
+    {
+        if (n < _n)
+        {
+            while (_n > n)
+                this->pop_back();            
+        }
+        else if (n > _n)
+        {
+            this->insert(this->end(), n - _n, val);
+        }
+    }
     
     void clear() {
         erase(begin(), end());
