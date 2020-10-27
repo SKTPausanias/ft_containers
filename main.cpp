@@ -6,14 +6,16 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 19:48:44 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/27 13:47:54 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include "Vector.hpp"
 #include "List.hpp"
+#include "Queue.hpp"
 #include <map>
+#include "Stack.hpp"
 
 void test_vector()
 {
@@ -307,6 +309,6 @@ void test_list()
 int main()
 {
     //test_vector();
-    test_list();
+    //test_list();
     return 0;
 }

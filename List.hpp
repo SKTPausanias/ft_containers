@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 18:53:25 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/27 10:55:26 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,9 +264,6 @@ public:
         {
             _List_Node<T>* node = new _List_Node<T>(nullptr, nullptr);
             node->el = val;
-            //if (this->_n == 0)
-            //    this->_tail->insert_before(node);
-            //else
             this->_head->insert_before(node);
             this->_head = node;
             _n++;
@@ -277,8 +274,6 @@ public:
             _List_Node<T>* node = new _List_Node<T>(nullptr, nullptr);
             node->el = val;
             this->_tail->insert_before(node);
-            //if (_n == 0)
-                //this->_head = node;
             _n++;
             return iterator(this->end());
         }
