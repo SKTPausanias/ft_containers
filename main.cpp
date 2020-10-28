@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/27 13:47:54 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/28 21:02:57 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,9 +306,15 @@ void test_list()
         std::cout << *it << " ";
 }
 
+void test_queue()
+{
+    
+}
+
 int main()
 {
     //test_vector();
     //test_list();
+    test_queue();
     return 0;
 }
