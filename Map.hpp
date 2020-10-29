@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:50 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/28 21:01:30 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/29 16:13:56 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft
 {
 
 template<typename key, typename T>
-struct  pair
+struct _pair
 {
     typedef key first_type;
     typedef T second_type;
@@ -29,13 +29,16 @@ struct  pair
     first_type key_value;
     second_type mapped_value;
     
-    pair* prev;
-    pair* next;
+    _pair* prev;
+    _pair* next;
 
-    pair(pair *prev_, pair *next_)
-                                : key_value(), mapped_value(), prev(prev_), next(next_) {}
+    _pair(_pair *prev_, _pair *next_)
+                                : key_value(), mapped_value(), prev(prev_), next(next_) { }
     
-    void insert_before(pair *node) {
+    _pair(first_type t1, second_type t2): key_value(t1), mapped_value(t2) { }
+    
+    
+    void insert_before(_pair *node) {
 		if (this->prev) {
 			node->prev = this->prev;
 			this->prev->next = node;
@@ -57,7 +60,7 @@ public:
     typedef std::ptrdiff_t difference_type;
 protected:
     typedef MapIterator<key, T> _Self;
-    typedef pair<key, T> pair;
+    typedef _pair<key, T> pair;
     pair* _p;
 public:
     MapIterator(): _p(nullptr) { }
@@ -123,7 +126,7 @@ class Map
 public:
     typedef Key key_type;
     typedef T mapped_type;
-    typedef pair<const key_type, mapped_type> value_type;
+    typedef _pair<const key_type, mapped_type> value_type;
     typedef Compare key_compare;
     typedef value_type& reference;
     typedef const value_type& const_reference;
@@ -154,25 +157,25 @@ public:
 
 private:
     typedef Map<Key, T, Compare> _Self;
-    pair<Key, T> *_head;
-    pair<Key, T> *_tail;
+    _pair<Key, T> *_head;
+    _pair<Key, T> *_tail;
     key_compare comp;
     size_type _n;
 public:
-    Map(const key_compare& comp = key_compare()): _n(0) {
-        _head = new pair<Key, T>(NULL, NULL);
+    Map(const key_compare& comp = key_compare()): comp(comp), _n(0) {
+        _head = new _pair<Key, T>(NULL, NULL);
         _tail = _head;
         //insert(begin(), n, val);
     }
 
     Map(iterator first, iterator last) {
-        _head = new pair<Key, T>(NULL, NULL);
+        _head = new _pair<Key, T>(NULL, NULL);
         _tail = _head;
         insert(begin(), first, last);
     }
 
     Map(const Map& x) {
-        _head = new pair<Key, T>(NULL, NULL);
+        _head = new _pair<Key, T>(NULL, NULL);
         _tail = _head;
         insert(begin(), x.begin(), x.end());
     }
@@ -193,7 +196,7 @@ public:
     }
     
     const_iterator begin() const {
-        typedef pair<const Key, const T> const_pair;
+        typedef _pair<const Key, const T> const_pair;
 		return const_iterator(reinterpret_cast<const_pair *>(_head));
     }
     
@@ -202,7 +205,7 @@ public:
     }
 
     const_iterator end() const {
-        typedef pair<const Key, const T> const_pair;
+        typedef _pair<const Key, const T> const_pair;
 		return const_iterator(reinterpret_cast<const_pair *>(_tail));
     }
 
@@ -240,7 +243,7 @@ public:
             if (it.base()->key_value == k)
                 return it.base()->mapped_value;
         }
-        const value_type val = pair<k, ()>;
+        const value_type val = _pair<key_type, mapped_type>(k, mapped_type());
         insert(val);
     }
 
@@ -253,7 +256,7 @@ public:
         } 
         if (position == this->begin())
         {
-            pair<Key, T>* pair = new pair<Key, T>(nullptr, nullptr);
+            _pair<Key, T>* pair = new _pair<Key, T>(nullptr, nullptr);
             pair->key_value = val->key_value;
             pair->mapped_value = val->key_value;
             this->_head->insert_before(pair);
@@ -263,7 +266,7 @@ public:
         }
         else if (position == this->end())
         {
-            pair<Key, T>* pair = new pair<Key, T>(nullptr, nullptr);
+            _pair<Key, T>* pair = new _pair<Key, T>(nullptr, nullptr);
             pair->key_value = val->key_value;
             pair->mapped_value = val->key_value;
             this->_tail->insert_before(pair);
@@ -272,7 +275,7 @@ public:
         }
         else
         {
-            pair<Key, T>* pair = new pair<Key, T>(nullptr, nullptr);
+            _pair<Key, T>* pair = new _pair<Key, T>(nullptr, nullptr);
             pair->key_value = val->key_value;
             pair->mapped_value = val->key_value;
             position.base()->insert_before(pair);
@@ -281,14 +284,14 @@ public:
         }
     }
     
-    pair<iterator,bool> insert (const value_type& val) {
+    _pair<iterator,bool> insert (const value_type& val) {
         iterator ite = this->end();
         for (iterator it = this->begin(); it != ite; it++)
         {
             if (it.base()->key_value == val->key_value)
-                return pair<iterator(it.base()), false>;
+                return (_pair<iterator, bool>(it.base(), false));
         }
-        return pair<insert(lower_bound(val->key_value), val), true>;
+        return _pair<iterator, bool>(insert(lower_bound(val->key_value), val), true);
     }
     
    void insert (iterator position, const_iterator first, const_iterator last) {
@@ -312,7 +315,7 @@ public:
             }
             else if (_n >= 1)
             {
-                pair<Key, T> *tmp = this->_head->next;
+                _pair<Key, T> *tmp = this->_head->next;
                 if (_head->prev)
                     _head->prev->next = _head->next;
                 if (_head->next)
@@ -327,7 +330,7 @@ public:
                 erase(this->begin());
             else if (_n >= 1)
             {
-                pair<Key, T> *tmp = this->_tail->prev;
+                _pair<Key, T> *tmp = this->_tail->prev;
                 if (_tail->prev->prev)
                     _tail->prev->prev->next = _tail->prev->next;
                 if (_tail->prev->next)
@@ -338,7 +341,7 @@ public:
         }
         else
         {
-            pair<Key, T>* node_right = position.base()->next;
+            _pair<Key, T>* node_right = position.base()->next;
             position.base()->next->prev = position.base()->prev;
             position.base()->prev->next = position.base()->next;
             delete position.base();
@@ -447,7 +450,8 @@ public:
     iterator upper_bound (const key_type& k) {
         key_compare cmp = key_comp();
         iterator ite = this->end();
-        for (iterator it = this->begin(); it != ite; it++)
+        iterator it = this->begin();
+        for (it; it != ite; it++)
         {
             if (cmp(k, it.base()->key_value) == false)
                 break;
@@ -458,7 +462,8 @@ public:
     const_iterator upper_bound (const key_type& k) const {
         key_compare cmp = key_comp();
         iterator ite = this->end();
-        for (iterator it = this->begin(); it != ite; it++)
+        iterator it = this->begin();
+        for (it; it != ite; it++)
         {
             if (cmp(k, it.base()->key_value) == false)
                 break;
@@ -466,12 +471,12 @@ public:
         return const_iterator(it.base());
     }
 
-    pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
-        return pair(lower_bound(k), upper_bound(k));
+    _pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
+        return _pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
     }
     
-    pair<iterator,iterator>             equal_range (const key_type& k) {
-        return pair(lower_bound(k), upper_bound(k));
+    _pair<iterator,iterator>             equal_range (const key_type& k) {
+        return _pair<iterator, iterator>(lower_bound(k), upper_bound(k));
     }
 };
 
