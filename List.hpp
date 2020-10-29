@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/27 10:55:26 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/28 21:19:36 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,13 +144,13 @@ public:
         insert(begin(), n, val);
     }
 
-    List(iterator first, iterator last) {
+    List(iterator first, iterator last): _n(0) {
         _head = new _List_Node<T>(NULL, NULL);
         _tail = _head;
         insert(begin(), first, last);
     }
 
-    List(const List& x) {
+    List(const List& x): _n(0) {
         _head = new _List_Node<T>(NULL, NULL);
         _tail = _head;
         insert(begin(), x.begin(), x.end());

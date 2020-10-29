@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/28 21:02:57 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/29 12:06:43 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,13 +308,82 @@ void test_list()
 
 void test_queue()
 {
-    
+    ft::List<int> mylist (2,200);         // list with 2 elements
+
+    ft::Queue<int> first;                 // empty Queue
+    ft::Queue<int,ft::List<int> > second; // empty Queue with list as underlying container
+    ft::Queue<int,ft::List<int> > third (mylist);
+
+    std::cout << "size of first: " << first.size() << '\n';
+    std::cout << "size of second: " << second.size() << '\n';
+    std::cout << "size of third: " << third.size() << '\n';
+
+    std::cout << "second empty?: ";
+    if (second.empty() == false)
+        std::cout << "not empty\n";
+    else
+        std::cout << "empty\n";
+  
+    std::cout << "third empty?: ";
+    if (third.empty() == false)
+        std::cout << "not empty\n";
+    else
+        std::cout << "empty\n";
+
+    third.push(10);
+    third.push(7);
+    std::cout << "third.push(10)\n";
+    std::cout << "third.push(7)\n"; 
+    std::cout << "third.front() is now " << third.front() << '\n';
+    std::cout << "third.back() is now " << third.back() << '\n';
+    third.pop();
+    third.pop();
+    std::cout << "third.pop()\n";
+    std::cout << "third.pop()\n";
+    std::cout << "third.front() is now " << third.front() << '\n';
+}
+
+void test_stack()
+{
+    ft::Vector<int> myvector (2,200);         // list with 2 elements
+
+    ft::Stack<int> first;                 // empty Stack
+    ft::Stack<int,ft::Vector<int> > second; // empty Stack with list as underlying container
+    ft::Stack<int,ft::Vector<int> > third (myvector);
+
+    std::cout << "size of first: " << first.size() << '\n';
+    std::cout << "size of second: " << second.size() << '\n';
+    std::cout << "size of third: " << third.size() << '\n';
+
+    std::cout << "second empty?: ";
+    if (second.empty() == false)
+        std::cout << "not empty\n";
+    else
+        std::cout << "empty\n";
+  
+    std::cout << "third empty?: ";
+    if (third.empty() == false)
+        std::cout << "not empty\n";
+    else
+        std::cout << "empty\n";
+
+    third.push(10);
+    third.push(7);
+    std::cout << "third.push(10)\n";
+    std::cout << "third.push(7)\n"; 
+    std::cout << "third.top() is now " << third.top() << '\n';
+    third.pop();
+    third.pop();
+    std::cout << "third.pop()\n";
+    std::cout << "third.pop()\n";
+    std::cout << "third.front() is now " << third.top() << '\n';
 }
 
 int main()
 {
     //test_vector();
     //test_list();
-    test_queue();
+    //test_queue();
+    //test_stack();
     return 0;
 }
