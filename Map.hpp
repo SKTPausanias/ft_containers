@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:50 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/29 16:13:56 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/31 18:00:26 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@ struct _pair
     _pair* prev;
     _pair* next;
 
-    _pair(_pair *prev_, _pair *next_)
-                                : key_value(), mapped_value(), prev(prev_), next(next_) { }
+    _pair(first_type t1, second_type t2): key_value(t1), mapped_value(t2) {}
     
-    _pair(first_type t1, second_type t2): key_value(t1), mapped_value(t2) { }
+    _pair(first_type t1, second_type t2, _pair *prev_, _pair *next_): key_value(t1), mapped_value(t2), prev(prev_), next(next_) {}
     
     
     void insert_before(_pair *node) {
@@ -73,10 +72,10 @@ public:
         return _p;
     }
     
-    reference operator*() const { return _p->el; }
-    pointer operator->() const { return &_p->el; }
-    const_reference operator*() { return _p->el; }
-    const_pointer operator->() { return &_p->el; }
+    reference operator*() const { return _p->mapped_value; }
+    pointer operator->() const { return &_p->mapped_value; }
+    const_reference operator*() { return _p->mapped_value; }
+    const_pointer operator->() { return &_p->mapped_value; }
     
     _Self& operator++() {
         _p = _p->next;
@@ -163,19 +162,18 @@ private:
     size_type _n;
 public:
     Map(const key_compare& comp = key_compare()): comp(comp), _n(0) {
-        _head = new _pair<Key, T>(NULL, NULL);
+        _head = new _pair<Key, T>(0, 0, NULL, NULL);
         _tail = _head;
-        //insert(begin(), n, val);
     }
 
     Map(iterator first, iterator last) {
-        _head = new _pair<Key, T>(NULL, NULL);
+        _head = new _pair<Key, T>(0, 0, NULL, NULL);
         _tail = _head;
         insert(begin(), first, last);
     }
 
     Map(const Map& x) {
-        _head = new _pair<Key, T>(NULL, NULL);
+        _head = new _pair<Key, T>(0, 0, NULL, NULL);
         _tail = _head;
         insert(begin(), x.begin(), x.end());
     }
@@ -243,22 +241,22 @@ public:
             if (it.base()->key_value == k)
                 return it.base()->mapped_value;
         }
-        const value_type val = _pair<key_type, mapped_type>(k, mapped_type());
-        insert(val);
+        insert(_pair<const key_type, mapped_type>(k, mapped_type()));
+        iterator it1 = lower_bound(k);
+        printf("%d\n", it1.base()->key_value);
+        return it1.base()->mapped_value;
     }
 
     iterator insert (iterator position, const value_type& val) {
         iterator ite = this->end();
         for (iterator it = this->begin(); it != ite; it++)
         {
-            if (it.base()->key_value == val->key_value)
+            if (it.base()->key_value == val.key_value)
                 return iterator(it.base());
         } 
         if (position == this->begin())
         {
-            _pair<Key, T>* pair = new _pair<Key, T>(nullptr, nullptr);
-            pair->key_value = val->key_value;
-            pair->mapped_value = val->key_value;
+            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
             this->_head->insert_before(pair);
             this->_head = pair;
             _n++;
@@ -266,18 +264,14 @@ public:
         }
         else if (position == this->end())
         {
-            _pair<Key, T>* pair = new _pair<Key, T>(nullptr, nullptr);
-            pair->key_value = val->key_value;
-            pair->mapped_value = val->key_value;
+            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
             this->_tail->insert_before(pair);
             _n++;
             return iterator(this->end());
         }
         else
         {
-            _pair<Key, T>* pair = new _pair<Key, T>(nullptr, nullptr);
-            pair->key_value = val->key_value;
-            pair->mapped_value = val->key_value;
+            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
             position.base()->insert_before(pair);
             _n++;
             return iterator(pair);
@@ -288,20 +282,29 @@ public:
         iterator ite = this->end();
         for (iterator it = this->begin(); it != ite; it++)
         {
-            if (it.base()->key_value == val->key_value)
+            if (it.base()->key_value == val.key_value)
                 return (_pair<iterator, bool>(it.base(), false));
         }
-        return _pair<iterator, bool>(insert(lower_bound(val->key_value), val), true);
+        iterator it1 = insert(lower_bound(val.key_value), val);
+        return _pair<iterator, bool>(it1, true);
     }
     
    void insert (iterator position, const_iterator first, const_iterator last) {
         while (first != last)
-            this->insert(position, *first++);
+        {
+            value_type val = _pair<const key_type, mapped_type>(first.base()->key_value, first.base()->key_value);
+            this->insert(position, val);
+            first++;
+        }
     }
 
     void insert (iterator position, iterator first, iterator last) {
         while (first != last)
-            this->insert(position, *first++);
+        {
+            value_type val = _pair<const key_type, mapped_type>(first.base()->key_value, first.base()->key_value);
+            this->insert(position, val);
+            first++;
+        }
     }
     
     void erase (iterator position)
@@ -341,7 +344,6 @@ public:
         }
         else
         {
-            _pair<Key, T>* node_right = position.base()->next;
             position.base()->next->prev = position.base()->prev;
             position.base()->prev->next = position.base()->next;
             delete position.base();
@@ -366,7 +368,6 @@ public:
     void erase (iterator first, iterator last) {
         while (first != last)
             erase(first++);
-        return (first);
     }
     
     void swap (Map& x) {
@@ -424,13 +425,14 @@ public:
         key_compare cmp = key_comp();
         iterator ite = this->end();
         iterator it = this->begin();
-        for (it; it != ite; it++)
+        while(it != ite)
         {
             if (cmp(k, it.base()->key_value) == false)
                 break;
+            it++;
         }
-        //if size >1 ?
-        it--;
+        //if (_n > 1)
+        //    it--;
         return iterator(it.base());
     }
     
@@ -438,12 +440,14 @@ public:
         key_compare cmp = key_comp();
         iterator ite = this->end();
         iterator it = this->begin();
-        for (it; it != ite; it++)
+        while(it != ite)
         {
             if (cmp(k, it.base()->key_value) == false)
                 break;
+            it++;
         }
-        it--;
+        //if (_n > 1)
+        //    it--;
         return const_iterator(it.base());
     }
 
@@ -451,11 +455,14 @@ public:
         key_compare cmp = key_comp();
         iterator ite = this->end();
         iterator it = this->begin();
-        for (it; it != ite; it++)
+        while (it != ite)
         {
             if (cmp(k, it.base()->key_value) == false)
                 break;
+            it++;
         }
+        //if (_n > 1)
+        //    it++;
         return iterator(it.base());
     }
 
@@ -463,20 +470,23 @@ public:
         key_compare cmp = key_comp();
         iterator ite = this->end();
         iterator it = this->begin();
-        for (it; it != ite; it++)
+        while (it != ite)
         {
             if (cmp(k, it.base()->key_value) == false)
                 break;
+            it++;
         }
+        //if (_n > 1)
+        //    it++;
         return const_iterator(it.base());
     }
 
     _pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
-        return _pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+        return _pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k), lower_bound(k).base()->prev, upper_bound(k).base()->next);
     }
     
     _pair<iterator,iterator>             equal_range (const key_type& k) {
-        return _pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+        return _pair<iterator, iterator>(lower_bound(k), upper_bound(k), lower_bound(k).base()->prev, upper_bound(k).base()->next);
     }
 };
 

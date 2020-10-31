@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/29 12:29:50 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/10/31 17:57:18 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,11 +379,31 @@ void test_stack()
     std::cout << "third.front() is now " << third.top() << '\n';
 }
 
+void test_map()
+{
+    ft::Map<char,int> first;
+
+    first['a']=10;
+    ft::Map<char,int>::iterator it = first.begin();
+    std::cout << it.base()->mapped_value << "\n";
+    first['b']=30;
+    first['c']=50;
+    first['d']=70;
+
+  /*ft::Map<char,int> second (first.begin(),first.end());
+
+  ft::Map<char,int> third (second);*/
+  
+    /*for (ft::Map<char,int>::iterator it = first.begin(); it != first.end(); it++)
+        std::cout << it.base()->key_value << " ";*/
+}
+
 int main()
 {
     //test_vector();
     //test_list();
     //test_queue();
     //test_stack();
+    test_map();
     return 0;
 }
