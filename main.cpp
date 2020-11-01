@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/31 17:57:18 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/01 16:50:19 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,8 +384,8 @@ void test_map()
     ft::Map<char,int> first;
 
     first['a']=10;
-    ft::Map<char,int>::iterator it = first.begin();
-    std::cout << it.base()->mapped_value << "\n";
+    //ft::Map<char,int>::iterator it = first.begin();
+    //std::cout << it.base()->mapped_value << "\n";
     first['b']=30;
     first['c']=50;
     first['d']=70;
@@ -394,8 +394,10 @@ void test_map()
 
   ft::Map<char,int> third (second);*/
   
-    /*for (ft::Map<char,int>::iterator it = first.begin(); it != first.end(); it++)
-        std::cout << it.base()->key_value << " ";*/
+    for (ft::Map<char,int>::iterator it = first.begin(); it != first.end(); it++)
+        std::cout << it.base()->key_value << " ";
+    //std::cout << "\n " << first.end().base()->key_value;
+    //std::cout << first.upper_bound('b').base()->key_value;
 }
 
 int main()

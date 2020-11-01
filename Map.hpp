@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:50 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/31 18:00:26 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/01 18:42:31 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,6 @@ public:
         }
         insert(_pair<const key_type, mapped_type>(k, mapped_type()));
         iterator it1 = lower_bound(k);
-        printf("%d\n", it1.base()->key_value);
         return it1.base()->mapped_value;
     }
 
@@ -253,9 +252,12 @@ public:
         {
             if (it.base()->key_value == val.key_value)
                 return iterator(it.base());
-        } 
+        }
+        //if ((position.base()->key_value < val.key_value) && _n > 1)
+        //    position++;
         if (position == this->begin())
         {
+            printf("hello\n");
             _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
             this->_head->insert_before(pair);
             this->_head = pair;
@@ -264,6 +266,7 @@ public:
         }
         else if (position == this->end())
         {
+            printf("end\n");
             _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
             this->_tail->insert_before(pair);
             _n++;
@@ -271,6 +274,7 @@ public:
         }
         else
         {
+            printf("what\n");
             _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
             position.base()->insert_before(pair);
             _n++;
@@ -285,7 +289,7 @@ public:
             if (it.base()->key_value == val.key_value)
                 return (_pair<iterator, bool>(it.base(), false));
         }
-        iterator it1 = insert(lower_bound(val.key_value), val);
+        iterator it1 = insert(upper_bound(val.key_value), val);
         return _pair<iterator, bool>(it1, true);
     }
     
@@ -427,13 +431,11 @@ public:
         iterator it = this->begin();
         while(it != ite)
         {
-            if (cmp(k, it.base()->key_value) == false)
-                break;
+            if (cmp(it.base()->key_value, k) == false)
+                return iterator(it.base());
             it++;
         }
-        //if (_n > 1)
-        //    it--;
-        return iterator(it.base());
+        return iterator(this->end());
     }
     
     const_iterator lower_bound (const key_type& k) const {
@@ -442,43 +444,25 @@ public:
         iterator it = this->begin();
         while(it != ite)
         {
-            if (cmp(k, it.base()->key_value) == false)
-                break;
+            if (cmp(it.base()->key_value, k) == false)
+                return iterator(it.base());
             it++;
         }
-        //if (_n > 1)
-        //    it--;
-        return const_iterator(it.base());
+        return const_iterator(this->end());
     }
 
     iterator upper_bound (const key_type& k) {
-        key_compare cmp = key_comp();
-        iterator ite = this->end();
-        iterator it = this->begin();
-        while (it != ite)
-        {
-            if (cmp(k, it.base()->key_value) == false)
-                break;
+        iterator it = lower_bound(k);
+        if (it.base()->next)
             it++;
-        }
-        //if (_n > 1)
-        //    it++;
-        return iterator(it.base());
+        return it;
     }
 
     const_iterator upper_bound (const key_type& k) const {
-        key_compare cmp = key_comp();
-        iterator ite = this->end();
-        iterator it = this->begin();
-        while (it != ite)
-        {
-            if (cmp(k, it.base()->key_value) == false)
-                break;
+        iterator it = lower_bound(k);
+        if (it.base()->next)
             it++;
-        }
-        //if (_n > 1)
-        //    it++;
-        return const_iterator(it.base());
+        return it;
     }
 
     _pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
