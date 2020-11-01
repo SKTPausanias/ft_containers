@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:50 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/01 19:33:43 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/01 19:54:56 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,9 +410,9 @@ public:
     }
     
     size_type count (const key_type& k) const {
+        const_iterator ite = this->end();
         size_type sum = 0;
-        iterator ite = this->end();
-        for (iterator it = this->begin(); it != ite; it++)
+        for (const_iterator it = this->begin(); it != ite; it++)
         {
             if (it.base()->key_value == k)
                 sum++;
@@ -461,11 +461,11 @@ public:
     }
 
     _pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
-        return _pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k), lower_bound(k).base()->prev, upper_bound(k).base()->next);
+        return _pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
     }
     
     _pair<iterator,iterator>             equal_range (const key_type& k) {
-        return _pair<iterator, iterator>(lower_bound(k), upper_bound(k), lower_bound(k).base()->prev, upper_bound(k).base()->next);
+        return _pair<iterator, iterator>(lower_bound(k), upper_bound(k));
     }
 };
 

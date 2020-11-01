@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/01 19:34:18 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/01 19:53:03 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -452,7 +452,27 @@ void test_map()
     if (third.value_comp()(ft::_pair<const char, int>('c', 42), ft::_pair<const char, int>('d', 44)) == true)
         std::cout << "value_comp == less\n";
 
+    std::cout << "third.find('b'): \n";
+    std::cout << "b => " << third.find('b').base()->mapped_value << '\n';
+
+    std::cout << "third.count('b'): \n";
+    std::cout << third.count('b') << "\n";
+
+    ft::Map<char,int>::iterator it3 = third.lower_bound('b');
+    std::cout << "third.lower_bound ('b'):\n";
+    std::cout << it3.base()->key_value << " " << it3.base()->mapped_value << "\n";
     
+    ft::Map<char,int>::iterator it4 = third.upper_bound('b');
+    std::cout << "third.upper_bound ('b'):\n";
+    std::cout << it4.base()->key_value << " " << it4.base()->mapped_value << "\n";
+
+    ft::_pair<ft::Map<char,int>::iterator,ft::Map<char,int>::iterator> ret = third.equal_range('c');
+
+    std::cout << "lower bound points to: ";
+    std::cout << ret.key_value.base()->key_value << " => " << ret.key_value.base()->mapped_value << '\n';
+
+    std::cout << "upper bound points to: ";
+    std::cout << ret.mapped_value.base()->key_value << " => " << ret.mapped_value.base()->mapped_value << '\n';
 }
 
 int main()
