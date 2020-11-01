@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/01 16:50:19 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/01 19:34:18 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,6 +379,11 @@ void test_stack()
     std::cout << "third.front() is now " << third.top() << '\n';
 }
 
+struct classcomp {
+  bool operator() (const char& lhs, const char& rhs) const
+  {return lhs<rhs;}
+};
+
 void test_map()
 {
     ft::Map<char,int> first;
@@ -390,14 +395,64 @@ void test_map()
     first['c']=50;
     first['d']=70;
 
-  /*ft::Map<char,int> second (first.begin(),first.end());
+    ft::Map<char,int> second (first.begin(),first.end());
 
-  ft::Map<char,int> third (second);*/
-  
+    ft::Map<char,int> third (second);
+    
+    ft::Map<char,int> fourth = third;
+
+    std::cout << "first:\n";
     for (ft::Map<char,int>::iterator it = first.begin(); it != first.end(); it++)
-        std::cout << it.base()->key_value << " ";
-    //std::cout << "\n " << first.end().base()->key_value;
-    //std::cout << first.upper_bound('b').base()->key_value;
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    std::cout << "second:\n";
+    for (ft::Map<char,int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    std::cout << "third:\n";
+    for (ft::Map<char,int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+    
+    std::cout << "fourth:\n";
+    for (ft::Map<char,int>::iterator it = fourth.begin(); it != fourth.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    std::cout << "second empty?: ";
+    if (second.empty() == false)
+        std::cout << "not empty\n";
+        
+    std::cout << "size of second: " << second.size() << '\n';
+    std::cout << "max_size: " << second.max_size() << "\n";
+
+    std::cout << "second['a'] is " << second['a'] << '\n';
+    std::cout << "second['a'] is " << second['c'] << '\n';
+
+    second.insert(ft::_pair<const char, int>('e', 42));
+    std::cout << "second.insert(_pair<const char, int>('e', 42)):\n";
+    for (ft::Map<char,int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+    
+    second.erase('a');
+    std::cout << "second.erase('a'):\n";
+    for (ft::Map<char,int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    third.swap(second);
+    std::cout << "third.swap('second'):\n";
+    std::cout << "third: \n";
+    for (ft::Map<char,int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    ft::Map<char,int>::key_compare mycomp = third.key_comp();
+    ft::Map<char,int>::iterator it = third.begin();
+    ft::Map<char,int>::iterator it2 = third.begin();
+    it2++;
+    if (mycomp(it.base()->key_value, it2.base()->key_value) == true)
+        std::cout << "my comp == less\n";
+    if (third.value_comp()(ft::_pair<const char, int>('c', 42), ft::_pair<const char, int>('d', 44)) == true)
+        std::cout << "value_comp == less\n";
+
+    
 }
 
 int main()

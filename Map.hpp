@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:50 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/01 18:42:31 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/01 19:33:43 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ public:
         typedef value_type second_argument_type;
         bool operator() (const value_type& x, const value_type& y) const
         {
-            return comp(x.first, y.first);
+            return comp(x.key_value, y.key_value);
         }
     };
 
@@ -166,13 +166,13 @@ public:
         _tail = _head;
     }
 
-    Map(iterator first, iterator last) {
+    Map(iterator first, iterator last): _n(0) {
         _head = new _pair<Key, T>(0, 0, NULL, NULL);
         _tail = _head;
         insert(begin(), first, last);
     }
 
-    Map(const Map& x) {
+    Map(const Map& x): _n(0) {
         _head = new _pair<Key, T>(0, 0, NULL, NULL);
         _tail = _head;
         insert(begin(), x.begin(), x.end());
@@ -253,12 +253,9 @@ public:
             if (it.base()->key_value == val.key_value)
                 return iterator(it.base());
         }
-        //if ((position.base()->key_value < val.key_value) && _n > 1)
-        //    position++;
         if (position == this->begin())
         {
-            printf("hello\n");
-            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
+            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.mapped_value, nullptr, nullptr);
             this->_head->insert_before(pair);
             this->_head = pair;
             _n++;
@@ -266,16 +263,14 @@ public:
         }
         else if (position == this->end())
         {
-            printf("end\n");
-            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
+            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.mapped_value, nullptr, nullptr);
             this->_tail->insert_before(pair);
             _n++;
             return iterator(this->end());
         }
         else
         {
-            printf("what\n");
-            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.key_value, nullptr, nullptr);
+            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.mapped_value, nullptr, nullptr);
             position.base()->insert_before(pair);
             _n++;
             return iterator(pair);
@@ -296,7 +291,7 @@ public:
    void insert (iterator position, const_iterator first, const_iterator last) {
         while (first != last)
         {
-            value_type val = _pair<const key_type, mapped_type>(first.base()->key_value, first.base()->key_value);
+            value_type val = _pair<const key_type, mapped_type>(first.base()->key_value, first.base()->mapped_value);
             this->insert(position, val);
             first++;
         }
@@ -305,7 +300,7 @@ public:
     void insert (iterator position, iterator first, iterator last) {
         while (first != last)
         {
-            value_type val = _pair<const key_type, mapped_type>(first.base()->key_value, first.base()->key_value);
+            value_type val = _pair<const key_type, mapped_type>(first.base()->key_value, first.base()->mapped_value);
             this->insert(position, val);
             first++;
         }
