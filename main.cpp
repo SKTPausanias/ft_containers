@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/01 19:53:03 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/02 14:02:20 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Queue.hpp"
 #include "Map.hpp"
 #include "Stack.hpp"
+#include "Set.hpp"
 
 void test_vector()
 {
@@ -431,7 +432,7 @@ void test_map()
     std::cout << "second.insert(_pair<const char, int>('e', 42)):\n";
     for (ft::Map<char,int>::iterator it = second.begin(); it != second.end(); it++)
         std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
-    
+            
     second.erase('a');
     std::cout << "second.erase('a'):\n";
     for (ft::Map<char,int>::iterator it = second.begin(); it != second.end(); it++)
@@ -475,12 +476,27 @@ void test_map()
     std::cout << ret.mapped_value.base()->key_value << " => " << ret.mapped_value.base()->mapped_value << '\n';
 }
 
+void test_set()
+{
+  ft::Set<int> first;                           // empty Set of ints
+
+  int myints[]= {10,20,30,40,50};
+  ft::Set<int> second (myints,myints+5);        // range
+
+  ft::Set<int> third (second);
+
+  for (ft::Set<int>::iterator it=second.begin(); it!=second.end(); ++it)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
+}
+
 int main()
 {
     //test_vector();
     //test_list();
     //test_queue();
     //test_stack();
-    test_map();
+    //test_map();
+    test_set();
     return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:26:31 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/01 13:58:04 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/02 11:03:02 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,8 +375,6 @@ public:
     
     void clear() {
         erase(begin(), end());
-        //_head = new _List_Node<T>(NULL, NULL);
-        //_tail = _head;
     }
     
     void splice (iterator position, List& x) {

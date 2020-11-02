@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Map.hpp                                            :+:      :+:    :+:   */
+/*   Set.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:50 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/02 11:03:20 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/02 14:00:54 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAP_HPP
-#define MAP_HPP
+#ifndef SET_HPP
+#define SET_HPP
 
 #include <iostream>
 #include "reverseIterator.hpp"
@@ -20,24 +20,20 @@
 namespace ft
 {
 
-template<typename key, typename T>
-struct _pair
+template<typename T>
+struct _node
 {
-    typedef key first_type;
-    typedef T second_type;
+    T key_value;
+    
+    _node* prev;
+    _node* next;
 
-    first_type key_value;
-    second_type mapped_value;
+    _node(T t1): key_value(t1) {}
     
-    _pair* prev;
-    _pair* next;
-
-    _pair(first_type t1, second_type t2): key_value(t1), mapped_value(t2) {}
-    
-    _pair(first_type t1, second_type t2, _pair *prev_, _pair *next_): key_value(t1), mapped_value(t2), prev(prev_), next(next_) {}
+    _node(T t1, _node *prev_, _node *next_): key_value(t1), prev(prev_), next(next_) {}
     
     
-    void insert_before(_pair *node) {
+    void insert_before(_node *node) {
 		if (this->prev) {
 			node->prev = this->prev;
 			this->prev->next = node;
@@ -47,8 +43,8 @@ struct _pair
 	}
 };
 
-template <typename key, typename T>
-class MapIterator
+template <typename T>
+class SetIterator
 {
 public:      
     typedef T value_type;
@@ -58,24 +54,24 @@ public:
     typedef const value_type* const_pointer;
     typedef std::ptrdiff_t difference_type;
 protected:
-    typedef MapIterator<key, T> _Self;
-    typedef _pair<key, T> pair;
-    pair* _p;
+    typedef SetIterator<T> _Self;
+    typedef _node<T> node;
+    node* _p;
 public:
-    MapIterator(): _p(nullptr) { }
-    MapIterator(pair* p): _p(p) { }
-    MapIterator(const MapIterator &x): _p(x._p) { }
-    virtual ~MapIterator() {};
-    MapIterator &operator=(const MapIterator &x) { this->_p = x._p; return *this; }
+    SetIterator(): _p(nullptr) { }
+    SetIterator(node* p): _p(p) { }
+    SetIterator(const SetIterator &x): _p(x._p) { }
+    virtual ~SetIterator() {};
+    SetIterator &operator=(const SetIterator &x) { this->_p = x._p; return *this; }
 
-    pair* base() const {
+    node* base() const {
         return _p;
     }
     
-    reference operator*() const { return _p->mapped_value; }
-    pointer operator->() const { return &_p->mapped_value; }
-    const_reference operator*() { return _p->mapped_value; }
-    const_pointer operator->() { return &_p->mapped_value; }
+    reference operator*() const { return _p->key_value; }
+    pointer operator->() const { return &_p->key_value; }
+    const_reference operator*() { return _p->key_value; }
+    const_pointer operator->() { return &_p->key_value; }
     
     _Self& operator++() {
         _p = _p->next;
@@ -99,93 +95,78 @@ public:
         return *this;
     }
 
-	bool operator==(MapIterator const &other) const {
+	bool operator==(SetIterator const &other) const {
 		return (this->_p == other._p);
 	}
-	bool operator!=(MapIterator const &other) const {
+	bool operator!=(SetIterator const &other) const {
 		return (this->_p != other._p);
 	}
-	bool operator<(MapIterator const &other) const {
+	bool operator<(SetIterator const &other) const {
 		return (this->_p < other._p);
 	}
-	bool operator<=(MapIterator const &other) const {
+	bool operator<=(SetIterator const &other) const {
 		return (this->_p <= other._p);
 	}
-	bool operator>(MapIterator const &other) const {
+	bool operator>(SetIterator const &other) const {
 		return (this->_p > other._p);
 	}
-	bool operator>=(MapIterator const &other) const {
+	bool operator>=(SetIterator const &other) const {
 		return (this->_p >= other._p);
 	}
 };
  
-template <class Key, class T, class Compare = std::less<Key>>
-class Map
+template <class T, class Compare = std::less<T>>
+class Set
 {
 public:
-    typedef Key key_type;
-    typedef T mapped_type;
-    typedef _pair<const key_type, mapped_type> value_type;
+    typedef T key_type;
+    typedef T value_type;
     typedef Compare key_compare;
+    typedef Compare value_compare;
     typedef value_type& reference;
     typedef const value_type& const_reference;
     typedef value_type* pointer;
     typedef const value_type* const_pointer;
-    typedef MapIterator<key_type, mapped_type> iterator;
-    typedef MapIterator<const key_type, const mapped_type> const_iterator;
+    typedef SetIterator<value_type> iterator;
+    typedef SetIterator<const value_type> const_iterator;
     typedef reverseIterator<iterator>  reverse_iterator;
     typedef reverseIterator<const_iterator> const_reverse_iterator; 
     typedef std::ptrdiff_t difference_type;
     typedef size_t size_type;
 
-    class value_compare
-    {
-    friend class Map;
-    protected:
-        Compare comp;
-        value_compare (Compare c) : comp(c) {}
-    public:
-        typedef bool result_type;
-        typedef value_type first_argument_type;
-        typedef value_type second_argument_type;
-        bool operator() (const value_type& x, const value_type& y) const
-        {
-            return comp(x.key_value, y.key_value);
-        }
-    };
-
 private:
-    typedef Map<Key, T, Compare> _Self;
-    _pair<Key, T> *_head;
-    _pair<Key, T> *_tail;
+    typedef Set<T, Compare> _Self;
+    _node<T> *_head;
+    _node<T> *_tail;
     key_compare comp;
     size_type _n;
 public:
-    Map(const key_compare& comp = key_compare()): comp(comp), _n(0) {
-        _head = new _pair<Key, T>(0, 0, NULL, NULL);
+    Set(const key_compare& comp = key_compare()): comp(comp), _n(0) {
+        _head = new _node<T>(0, NULL, NULL);
         _tail = _head;
     }
 
-    Map(iterator first, iterator last): _n(0) {
-        _head = new _pair<Key, T>(0, 0, NULL, NULL);
+    template <class InputIterator>
+    Set(InputIterator first, InputIterator last): _n(0) {
+        _head = new _node<T>(0, NULL, NULL);
         _tail = _head;
-        insert(begin(), first, last);
+        insert(first, last);
     }
 
-    Map(const Map& x): _n(0) {
-        _head = new _pair<Key, T>(0, 0, NULL, NULL);
+    Set(const Set& x): _n(0) {
+        _head = new _node<T>(0, NULL, NULL);
         _tail = _head;
-        insert(begin(), x.begin(), x.end());
+        insert(x.begin(), x.end());
     }
     
-    virtual ~Map() {
+    virtual ~Set() {
         this->clear();
         delete _tail;
     }
     
-    Map &operator=(const Map& x) {
+    Set &operator=(const Set& x) {
         this->clear();
-        insert(begin(), x.begin(), x.end());
+        insert(x.begin(), x.end());
         return *this;
     }
 
@@ -194,8 +175,8 @@ public:
     }
     
     const_iterator begin() const {
-        typedef _pair<const Key, const T> const_pair;
-		return const_iterator(reinterpret_cast<const_pair *>(_head));
+        typedef _node<const T> const_node;
+		return const_iterator(reinterpret_cast<const_node *>(_head));
     }
     
     iterator end() {
@@ -203,8 +184,8 @@ public:
     }
 
     const_iterator end() const {
-        typedef _pair<const Key, const T> const_pair;
-		return const_iterator(reinterpret_cast<const_pair *>(_tail));
+        typedef _node<const T> const_node;
+		return const_iterator(reinterpret_cast<const_node *>(_tail));
     }
 
     reverse_iterator rbegin() {
@@ -234,46 +215,34 @@ public:
         return std::numeric_limits<difference_type>::max() / sizeof(value_type);
     }
 
-    mapped_type& operator[] (const key_type& k) {
-        iterator ite = this->end();
-        for (iterator it = this->begin(); it != ite; it++)
-        {
-            if (it.base()->key_value == k)
-                return it.base()->mapped_value;
-        }
-        insert(_pair<const key_type, mapped_type>(k, mapped_type()));
-        iterator it1 = lower_bound(k);
-        return it1.base()->mapped_value;
-    }
-
     iterator insert (iterator position, const value_type& val) {
         iterator ite = this->end();
         for (iterator it = this->begin(); it != ite; it++)
         {
-            if (it.base()->key_value == val.key_value)
+            if (it.base()->key_value == val)
                 return iterator(it.base());
         }
         if (position == this->begin())
         {
-            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.mapped_value, nullptr, nullptr);
-            this->_head->insert_before(pair);
-            this->_head = pair;
+            _node<T>* node = new _node<T>(val, nullptr, nullptr);
+            this->_head->insert_before(node);
+            this->_head = node;
             _n++;
             return iterator(this->begin());
         }
         else if (position == this->end())
         {
-            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.mapped_value, nullptr, nullptr);
-            this->_tail->insert_before(pair);
+            _node<T>* node = new _node<T>(val, nullptr, nullptr);
+            this->_tail->insert_before(node);
             _n++;
             return iterator(this->end());
         }
         else
         {
-            _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.mapped_value, nullptr, nullptr);
-            position.base()->insert_before(pair);
+            _node<T>* node = new _node<T>(val, nullptr, nullptr);
+            position.base()->insert_before(node);
             _n++;
-            return iterator(pair);
+            return iterator(node);
         }
     }
     
@@ -281,30 +250,27 @@ public:
         iterator ite = this->end();
         for (iterator it = this->begin(); it != ite; it++)
         {
-            if (it.base()->key_value == val.key_value)
+            if (it.base()->key_value == val)
                 return (_pair<iterator, bool>(it.base(), false));
         }
-        iterator it1 = insert(upper_bound(val.key_value), val);
+        iterator it1 = insert(upper_bound(val), val);
         return _pair<iterator, bool>(it1, true);
     }
-    
-   void insert (iterator position, const_iterator first, const_iterator last) {
+
+    template <class InputIterator>
+    void insert (InputIterator first, InputIterator last) {
         while (first != last)
-        {
-            value_type val = _pair<const key_type, mapped_type>(first.base()->key_value, first.base()->mapped_value);
-            this->insert(position, val);
-            first++;
-        }
+            this->insert(*first++);
     }
 
-    void insert (iterator position, iterator first, iterator last) {
+    /*void insert (iterator position, iterator first, iterator last) {
         while (first != last)
         {
-            value_type val = _pair<const key_type, mapped_type>(first.base()->key_value, first.base()->mapped_value);
+            value_type val = first.base()->key_value;
             this->insert(position, val);
             first++;
         }
-    }
+    }*/
     
     void erase (iterator position)
     {
@@ -317,7 +283,7 @@ public:
             }
             else if (_n >= 1)
             {
-                _pair<Key, T> *tmp = this->_head->next;
+                _node<T> *tmp = this->_head->next;
                 if (_head->prev)
                     _head->prev->next = _head->next;
                 if (_head->next)
@@ -332,7 +298,7 @@ public:
                 erase(this->begin());
             else if (_n >= 1)
             {
-                _pair<Key, T> *tmp = this->_tail->prev;
+                _node<T> *tmp = this->_tail->prev;
                 if (_tail->prev->prev)
                     _tail->prev->prev->next = _tail->prev->next;
                 if (_tail->prev->next)
@@ -369,7 +335,7 @@ public:
             erase(first++);
     }
     
-    void swap (Map& x) {
+    void swap (Set& x) {
         std::swap(_head, x._head);
         std::swap(_tail, x._tail);
         std::swap(_n, x._n);
@@ -384,7 +350,7 @@ public:
     }
 
     value_compare value_comp() const {
-        return value_compare(comp);
+        return comp;
     }
     
     iterator find (const key_type& k) {
