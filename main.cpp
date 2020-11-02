@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/02 16:18:47 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/02 21:28:28 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@
 #include "Stack.hpp"
 #include "Set.hpp"
 #include "MultiSet.hpp"
+#include <deque>
 
 void test_vector()
 {
+    std::cout << "| VECTOR TEST |\n\n"; 
     ft::Vector<int> first;
     ft::Vector<int> second(4, 100);
     ft::Vector<int> third(second.begin(), --second.end());
@@ -30,21 +32,26 @@ void test_vector()
 
     fifth = third;
 
+    std::cout << "ft::Vector<int> second(4, 100):\n";
     for (ft::Vector<int>::iterator it = second.begin(); it != second.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\nthird: ";
-
+    
+    std::cout << "\n\nft::Vector<int> third(second.begin(), --second.end()):\n";
     for (ft::Vector<int>::iterator it = third.begin(); it != third.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\nfourth: ";
 
+    std::cout << "\n\nft::Vector<int> fourth(third):\n";
     for (ft::Vector<int>::iterator it = fourth.begin(); it != fourth.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\nfifth: ";
-
+    
+    std::cout << "\n\nft::Vector<int> fifth(5, 0); \nfifth = third;\n";
     for (ft::Vector<int>::iterator it = fifth.begin(); it != fifth.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\n";
+
+    std::cout << "\n\nft::Vector<int> first; \n";
+    std::cout << "first.insert(first.begin(), 1, 1);\n";
+    std::cout << "first.insert(first.end(), 1, 2);\n";
+    std::cout << "first.insert(first.end(), 1, 3);\n";
 
     first.insert(first.begin(), 1, 1);
     first.insert(first.end(), 1, 2);
@@ -54,12 +61,15 @@ void test_vector()
         std::cout << *it << " ";
     std::cout << "\n";
 
+    std::cout << "\nfirst.insert(first.begin(), 2, 2);\n";
     first.insert(first.begin(), 2, 2);
 
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
     std::cout << "\n";
 
+    std::cout << "\nft::Vector<int> anothervector(2, 400);\n";
+    std::cout << "first.insert(first.begin(), anothervector.begin(), anothervector.end());\n";    
     ft::Vector<int> anothervector(2, 400);
     first.insert(first.begin(), anothervector.begin(), anothervector.end());
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
@@ -68,6 +78,8 @@ void test_vector()
 
     ft::Vector<int> vec(2, 2);
     vec.insert(vec.begin(), 2, 3);
+    std::cout << "\nft::Vector<int> vec(2, 2);";
+    std::cout << "\nvec.insert(vec.begin(), 2, 3);\n";
     std::cout << "normal vector : ";
     for (ft::Vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
         std::cout << *it << " ";
@@ -82,49 +94,66 @@ void test_vector()
         it++;
     }
     std::cout << "\n";
-    
+
+    std::cout << "\nfirst.size(): ";
     std::cout << first.size() << "\n";
+    std::cout << "first.max_size(): ";
     std::cout << first.max_size() << "\n";
+
+    std::cout << "\nfirst.resize(9, 6): \n";
     first.resize(9, 6);
 
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
     std::cout << "\n";
 
+    std::cout << "\nfirst.capacity(): ";
     std::cout << first.capacity() << "\n";
+    
+    std::cout << "\nfirst is empty?\n";
     if (first.empty() == false)
         std::cout << "not empty\n";
     else
         std::cout << "empty\n";
+
+    std::cout << "\nfirst.reserve(10); "<< "\n";     
     first.reserve(10);
+
+    std::cout << "first.capacity(): ";
     std::cout << first.capacity() << "\n";
+    std::cout << "\nfirst[1]: ";
     std::cout << first[1] << "\n";
+    std::cout << "\nfirst.at(2): ";
     std::cout << first.at(2) << "\n";
+    std::cout << "\nfirst.front(): ";
     std::cout << first.front() << "\n";
+    std::cout << "\nfirst.back(): ";
     std::cout << first.back() << "\n";
 
+    std::cout << "\nfirst.assign(10, 5):\n";
     first.assign(10, 5);
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\n";
+    std::cout << "\n\nfirst.push_back(3):\n";
     first.push_back(3);
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\n";
+    std::cout << "\n\nfirst.pop_back(3):\n";
     first.pop_back();
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\n";
+    std::cout << "\n\nfirst.insert(first.begin(), 2, 2):\n";
     first.insert(first.begin(), 2, 2);
 
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
-    std::cout << "\n";
+    std::cout << "\n\nfirst.erase(first.begin()): \n";
     first.erase(first.begin());
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
     std::cout << "\n";
 
+    std::cout << "\nfirst.swap(second): \n";
     first.swap(second);
     for (ft::Vector<int>::iterator it = first.begin(); it != first.end(); it++)
         std::cout << *it << " ";
@@ -742,13 +771,13 @@ void test_multiset()
 
 int main()
 {
-    //test_vector();
+    test_vector();
     //test_list();
     //test_queue();
     //test_stack();
     //test_map();
     //test_multimap();
     //test_set();
-    test_multiset();
+    //test_multiset();
     return 0;
 }
