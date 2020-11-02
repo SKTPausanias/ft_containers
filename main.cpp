@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 20:19:01 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/02 14:02:20 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/02 16:18:47 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 #include "List.hpp"
 #include "Queue.hpp"
 #include "Map.hpp"
+#include "Multimap.hpp"
 #include "Stack.hpp"
 #include "Set.hpp"
+#include "MultiSet.hpp"
 
 void test_vector()
 {
@@ -394,7 +396,7 @@ void test_map()
     //std::cout << it.base()->mapped_value << "\n";
     first['b']=30;
     first['c']=50;
-    first['d']=70;
+    first['f']=70;
 
     ft::Map<char,int> second (first.begin(),first.end());
 
@@ -427,6 +429,11 @@ void test_map()
 
     std::cout << "second['a'] is " << second['a'] << '\n';
     std::cout << "second['a'] is " << second['c'] << '\n';
+
+    second.insert(ft::_pair<const char, int>('e', 42));
+    std::cout << "second.insert(_pair<const char, int>('e', 42)):\n";
+    for (ft::Map<char,int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
 
     second.insert(ft::_pair<const char, int>('e', 42));
     std::cout << "second.insert(_pair<const char, int>('e', 42)):\n";
@@ -476,18 +483,261 @@ void test_map()
     std::cout << ret.mapped_value.base()->key_value << " => " << ret.mapped_value.base()->mapped_value << '\n';
 }
 
+void test_multimap()
+{
+    ft::MultiMap<char,int> first;
+
+    first.insert(ft::_pair<const char, int>('a', 10));
+    first.insert(ft::_pair<const char, int>('b', 30));
+    first.insert(ft::_pair<const char, int>('c', 50));
+    first.insert(ft::_pair<const char, int>('f', 70));
+
+    ft::MultiMap<char,int> second (first.begin(),first.end());
+
+    ft::MultiMap<char,int> third (second);
+    
+    ft::MultiMap<char,int> fourth = third;
+
+    std::cout << "first:\n";
+    for (ft::MultiMap<char,int>::iterator it = first.begin(); it != first.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    std::cout << "second:\n";
+    for (ft::MultiMap<char,int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    std::cout << "third:\n";
+    for (ft::MultiMap<char,int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+    
+    std::cout << "fourth:\n";
+    for (ft::MultiMap<char,int>::iterator it = fourth.begin(); it != fourth.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    std::cout << "second empty?: ";
+    if (second.empty() == false)
+        std::cout << "not empty\n";
+        
+    std::cout << "size of second: " << second.size() << '\n';
+    std::cout << "max_size: " << second.max_size() << "\n";
+
+    second.insert(ft::_pair<const char, int>('e', 42));
+    std::cout << "second.insert(_pair<const char, int>('e', 42)):\n";
+    for (ft::MultiMap<char,int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    second.insert(ft::_pair<const char, int>('e', 42));
+    std::cout << "second.insert(_pair<const char, int>('e', 42)):\n";
+    for (ft::MultiMap<char,int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+            
+    second.erase('a');
+    std::cout << "second.erase('a'):\n";
+    for (ft::MultiMap<char,int>::iterator it = second.begin(); it != second.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    third.swap(second);
+    std::cout << "third.swap('second'):\n";
+    std::cout << "third: \n";
+    for (ft::MultiMap<char,int>::iterator it = third.begin(); it != third.end(); it++)
+        std::cout << it.base()->key_value << " " << it.base()->mapped_value << "\n";
+
+    ft::MultiMap<char,int>::key_compare mycomp = third.key_comp();
+    ft::MultiMap<char,int>::iterator it = third.begin();
+    ft::MultiMap<char,int>::iterator it2 = third.begin();
+    it2++;
+    if (mycomp(it.base()->key_value, it2.base()->key_value) == true)
+        std::cout << "my comp == less\n";
+    if (third.value_comp()(ft::_pair<const char, int>('c', 42), ft::_pair<const char, int>('d', 44)) == true)
+        std::cout << "value_comp == less\n";
+
+    std::cout << "third.find('b'): \n";
+    std::cout << "b => " << third.find('b').base()->mapped_value << '\n';
+
+    std::cout << "third.count('b'): \n";
+    std::cout << third.count('b') << "\n";
+
+    ft::MultiMap<char,int>::iterator it3 = third.lower_bound('b');
+    std::cout << "third.lower_bound ('b'):\n";
+    std::cout << it3.base()->key_value << " " << it3.base()->mapped_value << "\n";
+    
+    ft::MultiMap<char,int>::iterator it4 = third.upper_bound('b');
+    std::cout << "third.upper_bound ('b'):\n";
+    std::cout << it4.base()->key_value << " " << it4.base()->mapped_value << "\n";
+
+    ft::_pair<ft::MultiMap<char,int>::iterator,ft::MultiMap<char,int>::iterator> ret = third.equal_range('c');
+
+    std::cout << "lower bound points to: ";
+    std::cout << ret.key_value.base()->key_value << " => " << ret.key_value.base()->mapped_value << '\n';
+
+    std::cout << "upper bound points to: ";
+    std::cout << ret.mapped_value.base()->key_value << " => " << ret.mapped_value.base()->mapped_value << '\n';
+}
+
 void test_set()
 {
-  ft::Set<int> first;                           // empty Set of ints
+    ft::Set<int> first;                           // empty Set of ints
 
-  int myints[]= {10,20,30,40,50};
-  ft::Set<int> second (myints,myints+5);        // range
+    int myints[]= {10,20,30,40,50};
+    ft::Set<int> second (myints,myints+5);        // range
 
-  ft::Set<int> third (second);
+    ft::Set<int> third (second);
 
-  for (ft::Set<int>::iterator it=second.begin(); it!=second.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+    ft::Set<int> fourth = second;
+
+
+    std::cout << "second:\n";
+    for (ft::Set<int>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << "\nthird:\n";
+    for (ft::Set<int>::iterator it=third.begin(); it!=third.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << "\nfourth:\n";
+    for (ft::Set<int>::iterator it=fourth.begin(); it!=fourth.end(); ++it)
+        std::cout << ' ' << *it;
+
+    std::cout << "\nsecond empty?: ";
+    if (second.empty() == false)
+        std::cout << "not empty\n";
+        
+    std::cout << "size of second: " << second.size() << '\n';
+    std::cout << "max_size: " << second.max_size() << "\n";
+    
+    second.insert(25);
+    std::cout << "second.insert(25):\n";
+    for (ft::Set<int>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+
+    second.insert(25);
+    std::cout << "\nsecond.insert(25):\n";
+    for (ft::Set<int>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+    
+    second.erase(40);
+    std::cout << "\nsecond.erase(40):\n";
+    for (ft::Set<int>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+    
+    third.swap(second);
+    std::cout << "\nthird.swap('second'):\n";
+    std::cout << "third: \n";
+    for (ft::Set<int>::iterator it=third.begin(); it!=third.end(); ++it)
+        std::cout << ' ' << *it;
+    
+    std::cout << "\n";
+
+    ft::Set<int>::iterator it = third.begin();
+    ft::Set<int>::iterator it2 = third.begin();
+    it2++;
+    if (third.key_comp()(it.base()->key_value, it2.base()->key_value) == true)
+        std::cout << "my comp == less\n";
+    if (third.value_comp()(it.base()->key_value, it2.base()->key_value) == true)
+        std::cout << "value_comp == less\n";
+    
+    std::cout << "third.find(20): \n";
+    std::cout << "b => " << third.find(20).base()->key_value << '\n';
+
+    std::cout << "third.count(20): \n";
+    std::cout << third.count(20) << "\n";
+
+    ft::Set<int>::iterator it3 = third.lower_bound(20);
+    std::cout << "third.lower_bound (20):\n";
+    std::cout << it3.base()->key_value << "\n";
+    
+    ft::Set<int>::iterator it4 = third.upper_bound(20);
+    std::cout << "third.upper_bound (20):\n";
+    std::cout << it4.base()->key_value << "\n";
+
+    ft::_pair<ft::Set<int>::iterator,ft::Set<int>::iterator> ret = third.equal_range(20);
+
+    std::cout << "lower bound points to: ";
+    std::cout << ret.key_value.base()->key_value << '\n';
+
+    std::cout << "upper bound points to: ";
+    std::cout << ret.mapped_value.base()->key_value << '\n';
+}
+
+void test_multiset()
+{
+    ft::MultiSet<int> first;                           // empty MultiSet of ints
+
+    int myints[]= {10,20,30,40,50};
+    ft::MultiSet<int> second (myints,myints+5);        // range
+
+    ft::MultiSet<int> third (second);
+
+    ft::MultiSet<int> fourth = second;
+
+
+    std::cout << "second:\n";
+    for (ft::MultiSet<int>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << "\nthird:\n";
+    for (ft::MultiSet<int>::iterator it=third.begin(); it!=third.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << "\nfourth:\n";
+    for (ft::MultiSet<int>::iterator it=fourth.begin(); it!=fourth.end(); ++it)
+        std::cout << ' ' << *it;
+
+    std::cout << "\nsecond empty?: ";
+    if (second.empty() == false)
+        std::cout << "not empty\n";
+        
+    std::cout << "size of second: " << second.size() << '\n';
+    std::cout << "max_size: " << second.max_size() << "\n";
+    
+    second.insert(25);
+    std::cout << "second.insert(25):\n";
+    for (ft::MultiSet<int>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+
+    second.insert(25);
+    std::cout << "\nsecond.insert(25):\n";
+    for (ft::MultiSet<int>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+    
+    second.erase(40);
+    std::cout << "\nsecond.erase(40):\n";
+    for (ft::MultiSet<int>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+    
+    third.swap(second);
+    std::cout << "\nthird.swap('second'):\n";
+    std::cout << "third: \n";
+    for (ft::MultiSet<int>::iterator it=third.begin(); it!=third.end(); ++it)
+        std::cout << ' ' << *it;
+    
+    std::cout << "\n";
+
+    ft::MultiSet<int>::iterator it = third.begin();
+    ft::MultiSet<int>::iterator it2 = third.begin();
+    it2++;
+    if (third.key_comp()(it.base()->key_value, it2.base()->key_value) == true)
+        std::cout << "my comp == less\n";
+    if (third.value_comp()(it.base()->key_value, it2.base()->key_value) == true)
+        std::cout << "value_comp == less\n";
+    
+    std::cout << "third.find(20): \n";
+    std::cout << "b => " << third.find(20).base()->key_value << '\n';
+
+    std::cout << "third.count(20): \n";
+    std::cout << third.count(20) << "\n";
+
+    ft::MultiSet<int>::iterator it3 = third.lower_bound(20);
+    std::cout << "third.lower_bound (20):\n";
+    std::cout << it3.base()->key_value << "\n";
+    
+    ft::MultiSet<int>::iterator it4 = third.upper_bound(20);
+    std::cout << "third.upper_bound (20):\n";
+    std::cout << it4.base()->key_value << "\n";
+
+    ft::_pair<ft::MultiSet<int>::iterator,ft::MultiSet<int>::iterator> ret = third.equal_range(20);
+
+    std::cout << "lower bound points to: ";
+    std::cout << ret.key_value.base()->key_value << '\n';
+
+    std::cout << "upper bound points to: ";
+    std::cout << ret.mapped_value.base()->key_value << '\n';
 }
 
 int main()
@@ -497,6 +747,8 @@ int main()
     //test_queue();
     //test_stack();
     //test_map();
-    test_set();
+    //test_multimap();
+    //test_set();
+    test_multiset();
     return 0;
 }

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Map.hpp                                            :+:      :+:    :+:   */
+/*   Multimap.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:50 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/02 15:07:16 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/02 15:45:46 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAP_HPP
-#define MAP_HPP
+#ifndef MULTIMAP_HPP
+#define MULTIMAP_HPP
 
 #include <iostream>
 #include "reverseIterator.hpp"
@@ -20,35 +20,8 @@
 namespace ft
 {
 
-template<typename key, typename T>
-struct _pair
-{
-    typedef key first_type;
-    typedef T second_type;
-
-    first_type key_value;
-    second_type mapped_value;
-    
-    _pair* prev;
-    _pair* next;
-
-    _pair(first_type t1, second_type t2): key_value(t1), mapped_value(t2) {}
-    
-    _pair(first_type t1, second_type t2, _pair *prev_, _pair *next_): key_value(t1), mapped_value(t2), prev(prev_), next(next_) {}
-    
-    
-    void insert_before(_pair *node) {
-		if (this->prev) {
-			node->prev = this->prev;
-			this->prev->next = node;
-		}
-		node->next = this;
-		this->prev = node;
-	}
-};
-
 template <typename key, typename T>
-class MapIterator
+class MultiMapIterator
 {
 public:      
     typedef T value_type;
@@ -58,15 +31,15 @@ public:
     typedef const value_type* const_pointer;
     typedef std::ptrdiff_t difference_type;
 protected:
-    typedef MapIterator<key, T> _Self;
+    typedef MultiMapIterator<key, T> _Self;
     typedef _pair<key, T> pair;
     pair* _p;
 public:
-    MapIterator(): _p(nullptr) { }
-    MapIterator(pair* p): _p(p) { }
-    MapIterator(const MapIterator &x): _p(x._p) { }
-    virtual ~MapIterator() {};
-    MapIterator &operator=(const MapIterator &x) { this->_p = x._p; return *this; }
+    MultiMapIterator(): _p(nullptr) { }
+    MultiMapIterator(pair* p): _p(p) { }
+    MultiMapIterator(const MultiMapIterator &x): _p(x._p) { }
+    virtual ~MultiMapIterator() {};
+    MultiMapIterator &operator=(const MultiMapIterator &x) { this->_p = x._p; return *this; }
 
     pair* base() const {
         return _p;
@@ -99,28 +72,28 @@ public:
         return *this;
     }
 
-	bool operator==(MapIterator const &other) const {
+	bool operator==(MultiMapIterator const &other) const {
 		return (this->_p == other._p);
 	}
-	bool operator!=(MapIterator const &other) const {
+	bool operator!=(MultiMapIterator const &other) const {
 		return (this->_p != other._p);
 	}
-	bool operator<(MapIterator const &other) const {
+	bool operator<(MultiMapIterator const &other) const {
 		return (this->_p < other._p);
 	}
-	bool operator<=(MapIterator const &other) const {
+	bool operator<=(MultiMapIterator const &other) const {
 		return (this->_p <= other._p);
 	}
-	bool operator>(MapIterator const &other) const {
+	bool operator>(MultiMapIterator const &other) const {
 		return (this->_p > other._p);
 	}
-	bool operator>=(MapIterator const &other) const {
+	bool operator>=(MultiMapIterator const &other) const {
 		return (this->_p >= other._p);
 	}
 };
  
 template <class Key, class T, class Compare = std::less<Key>>
-class Map
+class MultiMap
 {
 public:
     typedef Key key_type;
@@ -131,8 +104,8 @@ public:
     typedef const value_type& const_reference;
     typedef value_type* pointer;
     typedef const value_type* const_pointer;
-    typedef MapIterator<key_type, mapped_type> iterator;
-    typedef MapIterator<const key_type, const mapped_type> const_iterator;
+    typedef MultiMapIterator<key_type, mapped_type> iterator;
+    typedef MultiMapIterator<const key_type, const mapped_type> const_iterator;
     typedef reverseIterator<iterator>  reverse_iterator;
     typedef reverseIterator<const_iterator> const_reverse_iterator; 
     typedef std::ptrdiff_t difference_type;
@@ -140,7 +113,7 @@ public:
 
     class value_compare
     {
-    friend class Map;
+    friend class MultiMap;
     protected:
         Compare comp;
         value_compare (Compare c) : comp(c) {}
@@ -155,35 +128,35 @@ public:
     };
 
 private:
-    typedef Map<Key, T, Compare> _Self;
+    typedef MultiMap<Key, T, Compare> _Self;
     _pair<Key, T> *_head;
     _pair<Key, T> *_tail;
     key_compare comp;
     size_type _n;
 public:
-    Map(const key_compare& comp = key_compare()): comp(comp), _n(0) {
+    MultiMap(const key_compare& comp = key_compare()): comp(comp), _n(0) {
         _head = new _pair<Key, T>(0, 0, NULL, NULL);
         _tail = _head;
     }
 
-    Map(iterator first, iterator last): _n(0) {
+    MultiMap(iterator first, iterator last): _n(0) {
         _head = new _pair<Key, T>(0, 0, NULL, NULL);
         _tail = _head;
         insert(begin(), first, last);
     }
 
-    Map(const Map& x): _n(0) {
+    MultiMap(const MultiMap& x): _n(0) {
         _head = new _pair<Key, T>(0, 0, NULL, NULL);
         _tail = _head;
         insert(begin(), x.begin(), x.end());
     }
     
-    virtual ~Map() {
+    virtual ~MultiMap() {
         this->clear();
         delete _tail;
     }
     
-    Map &operator=(const Map& x) {
+    MultiMap &operator=(const MultiMap& x) {
         this->clear();
         insert(begin(), x.begin(), x.end());
         return *this;
@@ -234,25 +207,7 @@ public:
         return std::numeric_limits<difference_type>::max() / sizeof(value_type);
     }
 
-    mapped_type& operator[] (const key_type& k) {
-        iterator ite = this->end();
-        for (iterator it = this->begin(); it != ite; it++)
-        {
-            if (it.base()->key_value == k)
-                return it.base()->mapped_value;
-        }
-        insert(_pair<const key_type, mapped_type>(k, mapped_type()));
-        iterator it1 = lower_bound(k);
-        return it1.base()->mapped_value;
-    }
-
     iterator insert (iterator position, const value_type& val) {
-        iterator ite = this->end();
-        for (iterator it = this->begin(); it != ite; it++)
-        {
-            if (it.base()->key_value == val.key_value)
-                return iterator(it.base());
-        }
         if (position == this->begin())
         {
             _pair<Key, T>* pair = new _pair<Key, T>(val.key_value, val.mapped_value, nullptr, nullptr);
@@ -278,12 +233,6 @@ public:
     }
     
     _pair<iterator,bool> insert (const value_type& val) {
-        iterator ite = this->end();
-        for (iterator it = this->begin(); it != ite; it++)
-        {
-            if (it.base()->key_value == val.key_value)
-                return (_pair<iterator, bool>(it.base(), false));
-        }
         iterator it1 = insert(lower_bound(val.key_value), val);
         return _pair<iterator, bool>(it1, true);
     }
@@ -369,7 +318,7 @@ public:
             erase(first++);
     }
     
-    void swap (Map& x) {
+    void swap (MultiMap& x) {
         std::swap(_head, x._head);
         std::swap(_tail, x._tail);
         std::swap(_n, x._n);

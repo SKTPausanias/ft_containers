@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:50 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/11/02 14:00:54 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/02 15:10:48 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,7 @@ public:
             if (it.base()->key_value == val)
                 return (_pair<iterator, bool>(it.base(), false));
         }
-        iterator it1 = insert(upper_bound(val), val);
+        iterator it1 = insert(lower_bound(val), val);
         return _pair<iterator, bool>(it1, true);
     }
 
@@ -262,16 +262,7 @@ public:
         while (first != last)
             this->insert(*first++);
     }
-
-    /*void insert (iterator position, iterator first, iterator last) {
-        while (first != last)
-        {
-            value_type val = first.base()->key_value;
-            this->insert(position, val);
-            first++;
-        }
-    }*/
-    
+  
     void erase (iterator position)
     {
         if (position == this->begin()) {
