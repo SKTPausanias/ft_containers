@@ -6,7 +6,7 @@
 /*   By: mlaplana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 19:30:57 by mlaplana          #+#    #+#             */
-/*   Updated: 2020/10/26 23:39:10 by mlaplana         ###   ########.fr       */
+/*   Updated: 2020/11/03 13:43:23 by mlaplana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ namespace ft
         }
         
         Vector &operator=(const Vector &x) {
-            this->clear();
+            this->~Vector();
             this->_capacity = x._capacity;
             this->_size = x._size;
             this->_ptr = new T[_capacity + 1];
@@ -360,7 +360,7 @@ namespace ft
         }
         
         void clear() {
-            erase(begin(), end());
+            erase(this->begin(), this->end());
         }
     };
 
